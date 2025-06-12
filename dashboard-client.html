@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Espace Client</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f0f2f5;
+    }
+    .sidebar {
+        height: 100vh;
+        background-color: #007bff;
+        color: #fff;
+        position: fixed;
+        width: 250px;
+        padding-top: 20px;
+    }
+    .sidebar a {
+        color: #fff;
+        display: block;
+        padding: 15px;
+        text-decoration: none;
+    }
+    .sidebar a:hover {
+        background-color: #0056b3;
+    }
+    .content {
+        margin-left: 250px;
+        padding: 30px;
+    }
+    .navbar {
+        margin-left: 250px;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+    <h4 class="text-center">Espace Client</h4>
+    <a href="#"><i class="fas fa-home"></i> Accueil</a>
+    <a href="reserve.html"><i class="fas fa-ticket-alt"></i> Réserver un ticket</a>
+    <a href="historique.html"><i class="fas fa-history"></i> Historique</a>
+    <a href="paiement.html"><i class="fas fa-wallet"></i> Paiements</a>
+    <a href="compte.html"><i class="fas fa-user"></i> Mon compte</a>
+    <a href="login.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white border-bottom">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Tableau de bord client</span>
+    </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+    <div class="row mb-4">
+        <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+            <h5 class="card-title">Réserver un billet</h5>
+            <form>
+                <div class="form-group">
+                <label for="departure">Départ</label>
+                <input type="text" class="form-control" id="departure" placeholder="Ex: Lomé">
+                </div>
+                <div class="form-group">
+                <label for="destination">Destination</label>
+                <input type="text" class="form-control" id="destination" placeholder="Ex: Kara">
+                </div>
+                <div class="form-group">
+                <label for="date">Date de voyage</label>
+                <input type="date" class="form-control" id="date">
+                </div>
+                <button type="submit" class="btn btn-primary">Réserver</button>
+            </form>
+            </div>
+        </div>
+        </div>
+
+        <!-- Historique -->
+        <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+            <h5 class="card-title">Historique de réservation</h5>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                Lomé → Kara (05/06/2025)
+                <span class="badge badge-success">Payé</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                Lomé → Sokodé (30/05/2025)
+                <span class="badge badge-secondary">Annulé</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                Kara → Lomé (15/05/2025)
+                <span class="badge badge-success">Payé</span>
+                </li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Paiement -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+        <h5 class="card-title">Derniers paiements</h5>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Trajet</th>
+                <th>Montant</th>
+                <th>Statut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>05/06/2025</td>
+                <td>Lomé → Kara</td>
+                <td>7 000 FCFA</td>
+                <td><span class="badge badge-success">Réussi</span></td>
+            </tr>
+            <tr>
+                <td>15/05/2025</td>
+                <td>Kara → Lomé</td>
+                <td>6 000 FCFA</td>
+                <td><span class="badge badge-success">Réussi</span></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- Infos personnelles -->
+    <div class="card shadow">
+        <div class="card-body">
+        <h5 class="card-title">Mes informations</h5>
+        <p><strong>Nom :</strong> Elie Koudzo VIKOUM</p>
+        <p><strong>Email :</strong> elie@example.com</p>
+        <p><strong>Téléphone :</strong> +228 90 00 00 00</p>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

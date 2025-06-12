@@ -1,0 +1,70 @@
+<!-- historique.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; }
+    .sidebar { height: 100vh; background-color: #007bff; color: #fff; position: fixed; width: 250px; padding-top: 20px; }
+    .sidebar a { color: #fff; display: block; padding: 15px; text-decoration: none; }
+    .sidebar a:hover { background-color: #0056b3; }
+    .content { margin-left: 250px; padding: 30px; }
+    .navbar { margin-left: 250px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h4 class="text-center">Espace Client</h4>
+    <a href="dashboard-client.html"><i class="fas fa-home"></i> Accueil</a>
+    <a href="reserver.html"><i class="fas fa-ticket-alt"></i> Réserver un ticket</a>
+    <a href="historique.html"><i class="fas fa-history"></i> Historique</a>
+    <a href="paiements.html"><i class="fas fa-wallet"></i> Paiements</a>
+    <a href="compte.html"><i class="fas fa-user"></i> Mon compte</a>
+    <a href="login.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+</div>
+
+<nav class="navbar navbar-light bg-white border-bottom">
+    <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Historique</span>
+    </div>
+</nav>
+
+    <div class="content">
+    <div class="card shadow">
+        <div class="card-body">
+        <h5 class="card-title">Historique de réservation</h5>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+            Lomé → Kara (05/06/2025)
+            <span>
+                <span class="badge badge-success">Payé</span>
+                <button onclick="generatePDF('Lomé', 'Kara', '05/06/2025')" class="btn btn-sm btn-outline-primary ml-2">
+                <i class="fas fa-download"></i> PDF
+                </button>
+            </span>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </div>
+
+    <script>
+    function generatePDF(depart, arrivee, date) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text(`Ticket de voyage`, 20, 20);
+        doc.text(`Départ: ${depart}`, 20, 40);
+        doc.text(`Arrivée: ${arrivee}`, 20, 50);
+        doc.text(`Date: ${date}`, 20, 60);
+        doc.save(`ticket-${depart}-${arrivee}.pdf`);
+    }
+    </script>
+
+    </body>
+    </html>

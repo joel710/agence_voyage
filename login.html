@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Connexion</title>
+    
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <!-- Optional: Custom styles -->
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .social-icon {
+            color: #555;
+            font-size: 18px;
+        }
+        .register-link,
+        .forgot-password,
+        .terms,
+        .contact-support,
+        .social-login {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container login-container">
+    <form class="login-form" onsubmit="return redirectUser(event)">
+        <h2><i class="fas fa-user-circle"></i> Connexion</h2>
+
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Nom d'utilisateur" name="username" id="username" required />
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Mot de passe" name="password" id="password" required />
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-sign-in-alt"></i> Se connecter
+        </button>
+
+        <p class="register-link">Pas encore inscrit ? <a href="register.html">S'inscrire</a></p>
+        <p class="forgot-password"><a href="#">Mot de passe oublié ?</a></p>
+        <p class="terms">
+            En vous connectant, vous acceptez nos
+            <a href="#">Conditions d'utilisation</a> et notre
+            <a href="#">Politique de confidentialité</a>.
+        </p>
+        <p class="contact-support">Besoin d'aide ? <a href="#">Contactez le support</a></p>
+
+        <p class="social-login">Ou connectez-vous avec :</p>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- JS Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Script de redirection -->
+<script>
+function redirectUser(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (username === "admin" && password === "admin123") {
+        window.location.href = "index.html";
+    } else if (username === "client" && password === "client123") {
+        window.location.href = "dashboard-client.html";
+    } else {
+        alert("Nom d'utilisateur ou mot de passe incorrect.");
+    }
+
+    return false;
+}
+</script>
+
+</body>
+</html>
