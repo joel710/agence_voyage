@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, AfterViewInit, ElementRef, ViewChild } from '@angular/core'; // Added ElementRef, ViewChild
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink } from '@angular/router';
 import { AdminSidebarComponent, NavItem } from '../../components/admin-sidebar/admin-sidebar';
 import { AdminTopbarComponent } from '../../components/admin-topbar/admin-topbar';
 import Chart from 'chart.js/auto'; // Ensure this import is present
@@ -23,7 +22,7 @@ export interface LatestReservation {
   selector: 'app-admin-dashboard-page',
   standalone: true,
   imports: [
-    CommonModule, RouterOutlet, RouterLink, AdminSidebarComponent, AdminTopbarComponent,
+    CommonModule, AdminSidebarComponent, AdminTopbarComponent,
     AddClientModalComponent, AddAgentModalComponent, AddVoyageModalComponent, AddTypeBilletModalComponent,
     AddReservationModalComponent, AddPaiementModalComponent, DeleteConfirmationModalComponent
   ],
@@ -155,7 +154,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     } else {
       this.clientsList.push({ ...client, id: Date.now().toString() }); // ClientData doesn't have avatar, so removed assignment
     }
-    this.showNotification(\`Client \${client.prenom} \${client.nom} enregistré.\`);
+    this.showNotification(`Client ${client.prenom} ${client.nom} enregistré.`);
     this.closeClientModal();
   }
 
@@ -189,12 +188,12 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
   closeDeleteModal(): void { this.isDeleteModalOpen = false; this.itemToDeleteId = null; this.itemToDeleteName = ''; this.deleteAction = null; }
   handleConfirmDelete(): void {
-    if (this.deleteAction) { this.deleteAction(); this.showNotification(\`\${this.itemToDeleteName} supprimé.\`);}
+    if (this.deleteAction) { this.deleteAction(); this.showNotification(`${this.itemToDeleteName} supprimé.`);}
     this.closeDeleteModal();
   }
   deleteClientAction(clientId: string): void {
     this.clientsList = this.clientsList.filter(c => c.id !== clientId);
-    console.log(\`Client with ID: \${clientId} would be deleted.\`);
+    console.log(`Client with ID: ${clientId} would be deleted.`);
   }
 
   showNotification(message: string): void {
@@ -206,6 +205,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         setTimeout(() => {
             notificationElement.classList.add('hidden');
         }, 3000);
+    } else {
+      console.log('Notification elements not found. Message:', message);
     }
   }
 
@@ -231,7 +232,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
           responsive: true,
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, grid: { drawBorder: false } }, x: { grid: { display: false } } }
+          scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
         }
       });
       this.cdr.detectChanges();
@@ -247,6 +248,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     if (this.chart) {
       this.chart.destroy();
       this.chart = undefined;
+      console.log('Chart destroyed');
     }
   }
 
