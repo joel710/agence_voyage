@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './pages/home/home.component';
-import { LoginPageComponent } from './pages/login/login.component';
-import { RegisterPageComponent } from './pages/register/register.component';
-import { AdminDashboardPageComponent } from './pages/admin-dashboard/admin-dashboard.component';
-import { ClientDashboardPageComponent } from './pages/client-dashboard/client-dashboard.component';
+import { HomePageComponent } from './pages/home/home';
+import { LoginPageComponent } from './pages/login/login';
+import { RegisterPageComponent } from './pages/register/register';
+import { AdminDashboardPageComponent } from './pages/admin-dashboard/admin-dashboard';
+import { ClientDashboardPageComponent } from './pages/client-dashboard/client-dashboard';
 
 export const routes: Routes = [
     { path: '', component: HomePageComponent, pathMatch: 'full' },
