@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +23,7 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #0ea5e9, #0891b2);
@@ -31,27 +33,41 @@
             justify-content: center;
             padding: 20px;
         }
+
         .travel-bg {
             background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
         }
+
         .card-shadow {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
+
         .input-focus:focus {
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
         }
+
         .animate-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .step-indicator {
             transition: all 0.3s ease;
         }
+
         .step-active {
             background-color: #0ea5e9;
             color: white;
@@ -59,6 +75,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-6xl mx-auto bg-white rounded-2xl overflow-hidden card-shadow">
@@ -93,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Formulaire d'Inscription -->
                 <div class="p-8 sm:p-12 lg:p-16">
                     <!-- <div class="flex justify-center mb-8">
@@ -101,84 +118,113 @@
                             <i class="fas fa-passport text-3xl"></i>
                         </div>
                     </div>  -->
-                    
+
                     <!-- Indicateur d'étapes -->
-                    
-                    
+
+
                     <h2 class="text-3xl font-bold text-center text-dark mb-2">Créez votre compte</h2>
                     <p class="text-gray-600 text-center mb-8">Rejoignez-nous en quelques étapes simples</p>
-                    
+
                     <form class="space-y-6 animate-in">
                         <!-- Informations Personnelles -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Prénom -->
                             <div>
-                                <label for="firstName" class="block text-gray-700 mb-2">Prénom</label>
+                                <label for="prenomClient" class="block text-gray-700 mb-2">Prénom</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-user text-gray-400"></i>
                                     </div>
-                                    <input 
-                                        type="text" 
-                                        id="firstName" 
-                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                        placeholder="Votre prénom"
-                                        required
-                                    >
+                                    <input type="text" id="prenomClient" name="prenomClient"
+                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                        placeholder="Votre prénom" required>
                                 </div>
                             </div>
-                            
+
                             <!-- Nom -->
                             <div>
-                                <label for="lastName" class="block text-gray-700 mb-2">Nom</label>
+                                <label for="nomClient" class="block text-gray-700 mb-2">Nom</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-user text-gray-400"></i>
                                     </div>
-                                    <input 
-                                        type="text" 
-                                        id="lastName" 
-                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                        placeholder="Votre nom"
-                                        required
-                                    >
+                                    <input type="text" id="nomClient" name="nomClient"
+                                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                        placeholder="Votre nom" required>
                                 </div>
                             </div>
                         </div>
-                        
+
+                        <!-- Date de Naissance -->
+                        <div>
+                            <label for="dateNaiss" class="block text-gray-700 mb-2">Date de Naissance</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" id="dateNaiss" name="dateNaiss"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    required>
+                            </div>
+                        </div>
+
+                        <!-- Sexe -->
+                        <div>
+                            <label for="sexeClient" class="block text-gray-700 mb-2">Sexe</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-venus-mars text-gray-400"></i>
+                                </div>
+                                <select id="sexeClient" name="sexeClient"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    required>
+                                    <option value="">Sélectionnez...</option>
+                                    <option value="homme">Homme</option>
+                                    <option value="femme">Femme</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Champ Email -->
                         <div>
-                            <label for="email" class="block text-gray-700 mb-2">Adresse Email</label>
+                            <label for="mailClient" class="block text-gray-700 mb-2">Adresse Email</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-gray-400"></i>
                                 </div>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                    placeholder="votre@email.com"
-                                    required
-                                >
+                                <input type="email" id="mailClient" name="mailClient"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="votre@email.com" required>
                             </div>
                         </div>
-                        
+
                         <!-- Champ Téléphone -->
                         <div>
-                            <label for="phone" class="block text-gray-700 mb-2">Téléphone</label>
+                            <label for="telClient" class="block text-gray-700 mb-2">Téléphone</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-phone text-gray-400"></i>
                                 </div>
-                                <input 
-                                    type="tel" 
-                                    id="phone" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                    placeholder="+33 6 12 34 56 78"
-                                >
+                                <input type="tel" id="telClient" name="telClient"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="+33 6 12 34 56 78">
                             </div>
                         </div>
-                        
+
+                        <!-- Login -->
+                        <div>
+                            <label for="login" class="block text-gray-700 mb-2">Login</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user-shield text-gray-400"></i>
+                                </div>
+                                <input type="text" id="login" name="login"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="Votre nom d'utilisateur" required>
+                            </div>
+                        </div>
+
                         <!-- Champ Mot de passe -->
                         <div>
                             <label for="password" class="block text-gray-700 mb-2">Mot de passe</label>
@@ -186,104 +232,53 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                    placeholder="••••••••"
-                                    required
-                                >
+                                <input type="password" id="password" name="password"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="••••••••" required>
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                     <i class="fas fa-eye-slash text-gray-400 cursor-pointer"></i>
                                 </div>
                             </div>
                             <p class="mt-1 text-sm text-gray-500">Minimum 8 caractères avec des chiffres et lettres</p>
                         </div>
-                        
+
                         <!-- Confirmation Mot de passe -->
                         <div>
-                            <label for="confirmPassword" class="block text-gray-700 mb-2">Confirmez le mot de passe</label>
+                            <label for="confirmPassword" class="block text-gray-700 mb-2">Confirmez le mot de
+                                passe</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
-                                <input 
-                                    type="password" 
-                                    id="confirmPassword" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300" 
-                                    placeholder="••••••••"
-                                    required
-                                >
+                                <input type="password" id="confirmPassword"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="••••••••" required>
                             </div>
                         </div>
-                        
-                        <!-- Préférences de voyage -->
-                        <div class="border-t border-gray-200 pt-6">
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Vos préférences de voyage</h3>
-                            
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="travelType" class="block text-gray-700 mb-2">Type de voyage préféré</label>
-                                    <select id="travelType" class="w-full py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300">
-                                        <option value="">Sélectionnez...</option>
-                                        <option value="beach">Plage & Détente</option>
-                                        <option value="adventure">Aventure & Trekking</option>
-                                        <option value="culture">Culture & Histoire</option>
-                                        <option value="gastronomy">Gastronomie & Vins</option>
-                                        <option value="city">Villes & Architecture</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-700 mb-2">Destinations préférées</label>
-                                    <div class="flex flex-wrap gap-2">
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                            <span class="ml-2 text-sm">Europe</span>
-                                        </label>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                            <span class="ml-2 text-sm">Asie</span>
-                                        </label>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                            <span class="ml-2 text-sm">Amériques</span>
-                                        </label>
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                            <span class="ml-2 text-sm">Afrique</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+
                         <!-- Conditions et Newsletter -->
                         <div class="space-y-4">
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    <input 
-                                        type="checkbox" 
-                                        id="terms"
+                                    <input type="checkbox" id="terms"
                                         class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                                        required
-                                    >
+                                        required>
                                 </div>
                                 <div class="ml-3 text-sm">
                                     <label for="terms" class="text-gray-700">
-                                        J'accepte les <a href="#" class="text-primary font-medium hover:underline">conditions d'utilisation</a> et la <a href="#" class="text-primary font-medium hover:underline">politique de confidentialité</a>
+                                        J'accepte les <a href="#"
+                                            class="text-primary font-medium hover:underline">conditions
+                                            d'utilisation</a> et la <a href="#"
+                                            class="text-primary font-medium hover:underline">politique de
+                                            confidentialité</a>
                                     </label>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    <input 
-                                        type="checkbox" 
-                                        id="newsletter"
-                                        class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                                        checked
-                                    >
+                                    <input type="checkbox" id="newsletter"
+                                        class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded" checked>
                                 </div>
                                 <div class="ml-3 text-sm">
                                     <label for="newsletter" class="text-gray-700">
@@ -292,19 +287,17 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Bouton d'Inscription -->
-                        <button 
-                            type="submit"
-                            class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                        >
+                        <button type="submit"
+                            class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                             Créer mon compte
                         </button>
-                        
+
                         <!-- Déjà inscrit -->
                         <div class="mt-6 text-center">
                             <p class="text-gray-600">
-                                Vous avez déjà un compte? 
+                                Vous avez déjà un compte?
                                 <a href="#" class="text-primary font-medium hover:underline">Connectez-vous</a>
                             </p>
                         </div>
@@ -312,7 +305,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="mt-8 text-center text-white">
             <p>&copy; 2023 Agence Voyage. Tous droits réservés.</p>
         </div>
@@ -320,18 +313,18 @@
 
     <script>
         // Fonction pour basculer la visibilité du mot de passe
-        document.querySelector('.fa-eye-slash').addEventListener('click', function() {
+        document.querySelector('.fa-eye-slash').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
-            
+
             // Changer l'icône
             this.classList.toggle('fa-eye-slash');
             this.classList.toggle('fa-eye');
         });
-        
+
         // Animation au chargement
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const formElements = document.querySelectorAll('input, select, button, label');
             formElements.forEach((el, index) => {
                 setTimeout(() => {
@@ -339,11 +332,11 @@
                 }, 100 * index);
             });
         });
-        
+
         // Validation du mot de passe en temps réel
         const passwordInput = document.getElementById('password');
         const confirmInput = document.getElementById('confirmPassword');
-        
+
         function validatePassword() {
             if (passwordInput.value !== confirmInput.value) {
                 confirmInput.setCustomValidity("Les mots de passe ne correspondent pas");
@@ -351,10 +344,10 @@
                 confirmInput.setCustomValidity("");
             }
         }
-        
+
         passwordInput.addEventListener('input', validatePassword);
         confirmInput.addEventListener('input', validatePassword);
-        
+
         // Animation de l'indicateur d'étapes
         const steps = document.querySelectorAll('.step-indicator');
         steps.forEach((step, index) => {
@@ -365,4 +358,5 @@
         });
     </script>
 </body>
+
 </html>
