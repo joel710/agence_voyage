@@ -1,0 +1,149 @@
+<app-header></app-header>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto bg-white rounded-2xl overflow-hidden card-shadow">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <!-- Section Image -->
+            <div class="travel-bg hidden lg:block relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-secondary/80"></div>
+                <div class="relative z-10 h-full flex flex-col justify-between p-12 text-white">
+                    <div>
+                        <h1 class="text-4xl font-bold mb-4">Explorez le Monde</h1>
+                        <p class="text-xl opacity-90">Votre prochaine aventure commence ici</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <p>Découvrez plus de 500 destinations exclusives</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                            <p>Offres spéciales pour les membres</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <p>Paiements sécurisés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire de Connexion -->
+            <div class="p-8 sm:p-12 lg:p-16">
+                <div class="flex justify-center mb-8">
+                    <div class="bg-primary text-white p-4 rounded-full">
+                        <i class="fas fa-plane-departure text-3xl"></i>
+                    </div>
+                </div>
+
+                <h2 class="text-3xl font-bold text-center text-dark mb-2">Connexion à votre compte</h2>
+                <p class="text-gray-600 text-center mb-8">Accédez à votre espace personnel</p>
+
+                <form class="space-y-6" (ngSubmit)="onLoginSubmit()">
+                    <!-- Champ Email -->
+                    <div>
+                        <label for="email" class="block text-gray-700 mb-2">Adresse Email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input
+                                type="email"
+                                id="email" name="email" [(ngModel)]="loginForm.email"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="votre@email.com"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Champ Mot de passe -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label for="password" class="block text-gray-700">Mot de passe</label>
+                            <a routerLink="/mot-de-passe-oublie" class="text-sm text-primary hover:underline">Mot de passe oublié?</a>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input
+                                [type]="showPassword ? 'text' : 'password'"
+                                id="password" name="password" [(ngModel)]="loginForm.password"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="••••••••"
+                                required
+                            >
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i class="cursor-pointer text-gray-400" [class]="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'" (click)="togglePasswordVisibility()"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case à cocher -->
+                    <div class="flex items-center">
+                        <input
+                            type="checkbox"
+                            id="remember" name="remember" [(ngModel)]="loginForm.rememberMe"
+                            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                        >
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <!-- Bouton de Connexion -->
+                    <button
+                        type="submit"
+                        class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                        Se connecter
+                    </button>
+
+                    <!-- Séparateur -->
+                    <div class="relative flex items-center justify-center">
+                        <div class="border-t border-gray-300 w-full"></div>
+                        <span class="px-4 text-gray-500 bg-white text-sm">ou</span>
+                        <div class="border-t border-gray-300 w-full"></div>
+                    </div>
+
+                    <!-- Connexion avec réseaux sociaux -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <button
+                            type="button" (click)="socialLogin('google')"
+                            class="flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                        >
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            <span>Google</span>
+                        </button>
+                        <button
+                            type="button" (click)="socialLogin('facebook')"
+                            class="flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                        >
+                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
+                            <span>Facebook</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Inscription -->
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600">
+                        Vous n'avez pas de compte?
+                        <a routerLink="/inscription" class="text-primary font-medium hover:underline">S'inscrire maintenant</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center text-white">
+        <p>&copy; {{ currentYear }} Agence Voyage. Tous droits réservés.</p>
+    </div>
+</div>
+<app-footer></app-footer>
