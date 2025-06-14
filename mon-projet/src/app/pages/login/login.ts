@@ -30,11 +30,21 @@ export class LoginPageComponent {
   onLoginSubmit() {
     console.log('Login form submitted:', this.loginForm);
     if (this.loginForm.email === 'admin@example.com' && this.loginForm.password === 'adminpassword') {
-      this.router.navigate(['/admin-dashboard']); // Ensure this route is correct
+      console.log('Admin credentials match. Attempting to navigate to /admin...');
+      this.router.navigate(['/admin']) // Corrected path
+        .then(success => {
+          if (success) {
+            console.log('Navigation to /admin successful!');
+          } else {
+            console.error('Navigation to /admin failed (returned false).');
+          }
+        })
+        .catch(err => {
+          console.error('Error during navigation to /admin:', err);
+        });
     } else {
-      // Handle regular user login or show error
       console.log('Invalid credentials or regular user');
-      alert('Identifiants incorrects !'); // Placeholder for better error handling
+      alert('Identifiants incorrects !');
     }
   }
 
