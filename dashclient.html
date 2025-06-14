@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr" class="bg-gray-50">
 
@@ -140,11 +139,97 @@
 
         <!-- Profile Section -->
         <div id="profile" class="tab-content bg-white rounded-lg shadow-md p-6 animate-fadeIn">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Mon Profil</h2>
 
+            <!-- Client Information Form -->
+            <div class="mb-8">
+                <h3 class="text-xl font-medium text-gray-700 mb-4">Informations personnelles</h3>
+                <form id="clientInfoForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                        <input type="text" id="nom" name="nom" value="Martin"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="prenom" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" value="Sophie"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="dateNaissance" class="block text-sm font-medium text-gray-700 mb-1">Date de
+                            Naissance</label>
+                        <input type="date" id="dateNaissance" name="dateNaissance" value="1985-05-20"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" name="email" value="sophie.martin@email.com"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="telephone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                        <input type="tel" id="telephone" name="telephone" value="0612345678"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="sexe" class="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
+                        <select id="sexe" name="sexe"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="femme" selected>Femme</option>
+                            <option value="homme">Homme</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="login" class="block text-sm font-medium text-gray-700 mb-1">Login</label>
+                        <input type="text" id="login" name="login" value="sophiem"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100"
+                            readonly>
+                    </div>
+                    <div class="md:col-span-2 flex justify-end">
+                        <button type="button" onclick="saveProfileChanges()"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Password Change Section -->
+            <div>
+                <h3 class="text-xl font-medium text-gray-700 mb-4">Changer le mot de passe</h3>
+                <form id="passwordChangeForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe
+                            actuel</label>
+                        <input type="password" id="currentPassword" name="currentPassword"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div></div> <!-- Empty cell for layout -->
+                    <div>
+                        <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de
+                            passe</label>
+                        <input type="password" id="newPassword" name="newPassword"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="confirmNewPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirmer
+                            le
+                            nouveau mot de passe</label>
+                        <input type="password" id="confirmNewPassword" name="confirmNewPassword"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-2 flex justify-end">
+                        <button type="button" onclick="changePassword()"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            Changer le mot de passe
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- Contenu inchangé pour le profil -->
-        </div>
+        <!-- Bookings Section -->
 
         <!-- Bookings Section -->
         <div id="bookings" class="tab-content hidden space-y-6 animate-fadeIn">
@@ -243,6 +328,10 @@
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Prix
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Statut
                                 </th>
                                 <th scope="col"
@@ -261,8 +350,8 @@
 
         <!-- Invoices Section -->
         <div id="invoices" class="tab-content hidden space-y-6 animate-fadeIn">
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg class="h-5 w-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                <svg class="h-6 w-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -310,57 +399,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    INV001
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    15/09/2023
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    BOOK001
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    1 200,00 €
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Payée
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm no-print">
-                                    <button onclick="printInvoice(this)" class="text-blue-600 hover:text-blue-800">
-                                        Imprimer
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    INV002
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    10/09/2023
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    BOOK002
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    800,00 €
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Payée
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm no-print">
-                                    <button onclick="printInvoice(this)" class="text-blue-600 hover:text-blue-800">
-                                        Imprimer
-                                    </button>
-                                </td>
-                            </tr>
+                        <tbody class="bg-white divide-y divide-gray-200" id="invoicesBody">
+                            <!-- Invoice rows will be dynamically inserted here -->
                         </tbody>
                     </table>
                 </div>
@@ -369,7 +409,49 @@
 
         <!-- Payments Section -->
         <div id="payments" class="tab-content hidden space-y-6 animate-fadeIn">
-            <!-- Contenu inchangé pour les paiements -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                <svg class="h-6 w-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                    </path>
+                </svg>
+                Historique des Paiements
+            </h2>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table id="paymentsTable" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Code Paiement
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Date
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Réf. Réservation
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Montant
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Statut
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="paymentsBody">
+                            <!-- Les données des paiements seront insérées ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -379,7 +461,7 @@
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Facture</h1>
-                    <p class="text-gray-600 mt-1">#INV001</p>
+                    <p id="templateInvoiceId" class="text-gray-600 mt-1">#INV001</p>
                 </div>
                 <div class="text-right">
                     <p class="text-gray-600">TravelEase</p>
@@ -391,12 +473,13 @@
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h3 class="text-lg font-medium text-gray-900">Facturé à</h3>
-                    <p class="text-gray-600 mt-2">Sophie Martin</p>
-                    <p class="text-gray-600">sophie.martin@email.com</p>
+                    <p id="templateClientName" class="text-gray-600 mt-2">Sophie Martin</p>
+                    <p id="templateClientEmail" class="text-gray-600">sophie.martin@email.com</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-gray-600">Date: <span class="font-medium">15/09/2023</span></p>
-                    <p class="text-gray-600">Réservation: <span class="font-medium">BOOK001</span></p>
+                    <p class="text-gray-600">Date: <span id="templateDate" class="font-medium">15/09/2023</span></p>
+                    <p class="text-gray-600">Réservation: <span id="templateReservationId"
+                            class="font-medium">BOOK001</span></p>
                 </div>
             </div>
 
@@ -414,14 +497,8 @@
                                 Total</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Billet Business Paris → New
-                                York</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 200,00 €</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1 200,00 €</td>
-                        </tr>
+                    <tbody class="bg-white divide-y divide-gray-200" id="templateItemsBody">
+                        <!-- Items will be dynamically inserted here -->
                     </tbody>
                 </table>
             </div>
@@ -430,15 +507,15 @@
                 <div class="w-1/3">
                     <div class="flex justify-between text-gray-900 font-medium mb-2">
                         <span>Total HT</span>
-                        <span>1 000,00 €</span>
+                        <span id="templateSubTotal">1 000,00 €</span>
                     </div>
                     <div class="flex justify-between text-gray-900 font-medium mb-2">
                         <span>TVA (20%)</span>
-                        <span>200,00 €</span>
+                        <span id="templateVat">200,00 €</span>
                     </div>
                     <div class="flex justify-between text-xl font-bold border-t border-gray-300 pt-2">
                         <span>Total</span>
-                        <span>1 200,00 €</span>
+                        <span id="templateTotalAmount">1 200,00 €</span>
                     </div>
                 </div>
             </div>
@@ -450,46 +527,49 @@
         // Données de démonstration
         const allBookings = [
             {
-                id: 'BOOK001',
-                date: '2023-09-15',
-                departure: 'Paris (CDG)',
-                arrival: 'New York (JFK)',
-                travelDate: '2023-10-01',
-                ticketType: 'business',
+                idReservation: 'BOOK001',
+                dateReservation: '2023-09-15',
+                departVoyage: 'Paris (CDG)',
+                arriveeVoyage: 'New York (JFK)',
+                dateVoyage: '2023-10-01',
+                typeBillet: 'business', // Represents libelleTypeBillet
                 status: 'confirmed',
+                price: 1200.00, // Represents prixTypeBillet
             },
             {
-                id: 'BOOK002',
-                date: '2023-09-10',
-                departure: 'Lyon (LYS)',
-                arrival: 'Barcelone (BCN)',
-                travelDate: '2023-10-15',
-                ticketType: 'economy',
+                idReservation: 'BOOK002',
+                dateReservation: '2023-09-10',
+                departVoyage: 'Lyon (LYS)',
+                arriveeVoyage: 'Barcelone (BCN)',
+                dateVoyage: '2023-10-15',
+                typeBillet: 'economy',
                 status: 'pending',
+                price: 800.50,
             },
             {
-                id: 'BOOK003',
-                date: '2023-09-05',
-                departure: 'Marseille (MRS)',
-                arrival: 'Casablanca (CMN)',
-                travelDate: '2023-11-01',
-                ticketType: 'economy',
+                idReservation: 'BOOK003',
+                dateReservation: '2023-09-05',
+                departVoyage: 'Marseille (MRS)',
+                arriveeVoyage: 'Casablanca (CMN)',
+                dateVoyage: '2023-11-01',
+                typeBillet: 'economy',
                 status: 'canceled',
+                price: 450.75,
             }
         ];
 
         // Filtrer les réservations
         function filterBookings() {
-            const departure = document.getElementById('departureCity').value;
-            const arrival = document.getElementById('arrivalCity').value;
-            const date = document.getElementById('travelDate').value;
-            const type = document.getElementById('ticketType').value;
+            const departureCity = document.getElementById('departureCity').value;
+            const arrivalCity = document.getElementById('arrivalCity').value;
+            const travelDate = document.getElementById('travelDate').value;
+            const ticketType = document.getElementById('ticketType').value;
 
             const filtered = allBookings.filter(booking => {
-                return (!departure || booking.departure === departure) &&
-                    (!arrival || booking.arrival === arrival) &&
-                    (!date || booking.travelDate === date) &&
-                    (!type || booking.ticketType === type);
+                return (!departureCity || booking.departVoyage === departureCity) &&
+                    (!arrivalCity || booking.arriveeVoyage === arrivalCity) &&
+                    (!travelDate || booking.dateVoyage === travelDate) &&
+                    (!ticketType || booking.typeBillet === ticketType);
             });
 
             displayBookings(filtered);
@@ -503,7 +583,7 @@
             if (bookings.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
                             Aucune réservation trouvée
                         </td>
                     </tr>
@@ -511,7 +591,7 @@
                 return;
             }
 
-            bookings.forEach(booking => {
+            bookings.forEach((booking, index) => { // Added index for unique onclick handlers if passing the object directly
                 const statusClasses = {
                     confirmed: 'bg-green-100 text-green-800',
                     pending: 'bg-yellow-100 text-yellow-800',
@@ -526,23 +606,33 @@
 
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50 transition-colors';
+                // Note: It's generally better to pass an identifier (like index or ID) to event handlers 
+                // and retrieve the object from the array inside the handler, rather than trying to stringify 
+                // the object directly into the onclick attribute if it gets complex.
+                // For viewBookingDetails, we pass the booking object by referencing its index in allBookings.
+                // For cancelBooking, we pass the idReservation.
                 row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${booking.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.date}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.departure} → ${booking.arrival}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.travelDate}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">${booking.ticketType === 'economy' ? 'Économique' : 'Business'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${booking.idReservation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.dateReservation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.departVoyage} → ${booking.arriveeVoyage}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.dateVoyage}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">${booking.typeBillet === 'economy' ? 'Économique' : 'Business'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.price.toFixed(2)} €</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClasses[booking.status]}">
                             ${statusText[booking.status]}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button class="text-blue-600 hover:text-blue-800 flex items-center">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm flex items-center">
+                        <button onclick='viewBookingDetails(allBookings[${allBookings.findIndex(b => b.idReservation === booking.idReservation)}])' class="text-blue-600 hover:text-blue-800 flex items-center">
                             Voir les détails
                             <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
+                        </button>
+                        <button onclick="cancelBooking('${booking.idReservation}')" class="text-red-600 hover:text-red-800 ml-2 flex items-center">
+                            Annuler
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </td>
                 `;
@@ -559,21 +649,249 @@
         // Initialiser avec toutes les réservations
         document.addEventListener('DOMContentLoaded', () => {
             displayBookings(allBookings);
+            displayPayments(allPayments);
+            displayInvoices(allInvoices);
         });
 
+        // Placeholder functions for Profile section
+        function saveProfileChanges() {
+            // In a real application, you would collect data from the form:
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
+            const dateNaissance = document.getElementById('dateNaissance').value;
+            const email = document.getElementById('email').value;
+            const telephone = document.getElementById('telephone').value;
+            const sexe = document.getElementById('sexe').value;
+            console.log('Simulating save profile changes:', { nom, prenom, dateNaissance, email, telephone, sexe });
+            alert('Les modifications du profil seraient enregistrées !');
+        }
+
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            // Add validation logic here (e.g., newPassword === confirmNewPassword)
+            console.log('Simulating change password: currentPassword provided, newPassword provided');
+            alert('Le mot de passe serait changé !');
+        }
+
+        // Placeholder functions for Bookings section
+        function viewBookingDetails(booking) {
+            if (!booking) {
+                console.error('Booking data is undefined for viewBookingDetails');
+                alert('Erreur: Impossible d\'afficher les détails de la réservation.');
+                return;
+            }
+            console.log('Simulating view booking details:', booking);
+            // Example: Construct a message with some booking details
+            let detailsMessage = `Détails de la réservation ${booking.idReservation}:\n`;
+            detailsMessage += `Date: ${booking.dateReservation}\n`;
+            detailsMessage += `Trajet: ${booking.departVoyage} → ${booking.arriveeVoyage}\n`;
+            detailsMessage += `Date du voyage: ${booking.dateVoyage}\n`;
+            detailsMessage += `Type: ${booking.typeBillet}\n`;
+            detailsMessage += `Prix: ${booking.price.toFixed(2)} €\n`;
+            detailsMessage += `Statut: ${booking.status}`;
+            alert(detailsMessage);
+        }
+
+        function cancelBooking(bookingId) {
+            console.log('Simulating cancel booking:', bookingId);
+            // In a real app, you might want to re-fetch/re-display bookings after cancellation
+            alert('La réservation ' + bookingId + ' serait annulée !');
+            // Potentially, remove the booking from allBookings and call displayBookings(allBookings)
+            // For now, just an alert.
+        }
+
+
+        // Données de démonstration pour les factures
+        const allInvoices = [
+            {
+                invoiceId: 'INV001',
+                date: '2023-09-15',
+                reservationId: 'BOOK001',
+                clientName: 'Sophie Martin',
+                clientEmail: 'sophie.martin@email.com',
+                items: [{ description: 'Billet Business Paris → New York', quantity: 1, unitPrice: 1000.00, total: 1000.00 }],
+                subTotal: 1000.00,
+                vat: 200.00,
+                totalAmount: 1200.00,
+                status: 'Payée'
+            },
+            {
+                invoiceId: 'INV002',
+                date: '2023-09-10',
+                reservationId: 'BOOK002',
+                clientName: 'Sophie Martin',
+                clientEmail: 'sophie.martin@email.com',
+                items: [{ description: 'Billet Économique Lyon → Barcelone', quantity: 1, unitPrice: 650.00, total: 650.00 }],
+                subTotal: 650.00,
+                vat: 150.50,
+                totalAmount: 800.50,
+                status: 'Payée'
+            },
+            {
+                invoiceId: 'INV003',
+                date: '2023-09-06',
+                reservationId: 'BOOK003',
+                clientName: 'Sophie Martin',
+                clientEmail: 'sophie.martin@email.com',
+                items: [{ description: 'Billet Économique Marseille → Casablanca', quantity: 1, unitPrice: 300.00, total: 300.00 },
+                { description: 'Assurance Voyage', quantity: 1, unitPrice: 150.75, total: 150.75 }],
+                subTotal: 450.75,
+                vat: 0.00,
+                totalAmount: 450.75,
+                status: 'Remboursée'
+            },
+            {
+                invoiceId: 'INV004',
+                date: '2023-10-01',
+                reservationId: 'BOOK004',
+                clientName: 'Sophie Martin',
+                clientEmail: 'sophie.martin@email.com',
+                items: [{ description: 'Billet Première Classe Paris → Dubai', quantity: 1, unitPrice: 500.00, total: 500.00 }],
+                subTotal: 500.00,
+                vat: 100.00,
+                totalAmount: 600.00,
+                status: 'En attente'
+            }
+        ];
+
+        // Afficher les factures dans le tableau principal
+        function displayInvoices(invoices) {
+            const tbody = document.getElementById('invoicesBody');
+            tbody.innerHTML = ''; // Effacer le contenu précédent
+
+            if (invoices.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            Aucune facture trouvée
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            invoices.forEach((invoice, index) => {
+                const statusClasses = {
+                    'Payée': 'bg-green-100 text-green-800',
+                    'En attente': 'bg-yellow-100 text-yellow-800',
+                    'Remboursée': 'bg-blue-100 text-blue-800'
+                };
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${invoice.invoiceId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${invoice.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${invoice.reservationId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${invoice.totalAmount.toFixed(2)} €</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClasses[invoice.status] || 'bg-gray-100 text-gray-800'}">
+                            ${invoice.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm no-print">
+                        <button onclick='printInvoice(allInvoices[${index}])' class="text-blue-600 hover:text-blue-800">
+                            Imprimer
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+
+        // Données de démonstration pour les paiements
+        const allPayments = [
+            { codePaiement: 'PAY001', datePaiement: '2023-09-15', idReservation: 'BOOK001', amount: 1200.00, status: 'Payée' },
+            { codePaiement: 'PAY002', datePaiement: '2023-09-10', idReservation: 'BOOK002', amount: 800.50, status: 'Payée' },
+            { codePaiement: 'PAY003', datePaiement: '2023-09-06', idReservation: 'BOOK003', amount: 450.75, status: 'Remboursé' },
+            { codePaiement: 'PAY004', datePaiement: '2023-10-01', idReservation: 'BOOK004', amount: 600.00, status: 'En attente' }
+        ];
+
+        // Afficher les paiements
+        function displayPayments(payments) {
+            const tbody = document.getElementById('paymentsBody');
+            tbody.innerHTML = ''; // Effacer le contenu précédent
+
+            if (payments.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            Aucun paiement trouvé
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            payments.forEach(payment => {
+                const statusClasses = {
+                    'Payée': 'bg-green-100 text-green-800',
+                    'En attente': 'bg-yellow-100 text-yellow-800',
+                    'Remboursé': 'bg-blue-100 text-blue-800'
+                };
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${payment.codePaiement}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${payment.datePaiement}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${payment.idReservation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${payment.amount.toFixed(2)} €</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClasses[payment.status] || 'bg-gray-100 text-gray-800'}">
+                            ${payment.status}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
         // Fonctions pour les factures
-        function printInvoice(button) {
-            const invoice = document.getElementById('invoiceTemplate');
-            invoice.classList.remove('hidden');
+        function printInvoice(invoiceData) {
+            if (!invoiceData) return;
+
+            const template = document.getElementById('invoiceTemplate');
+
+            // Populate header
+            document.getElementById('templateInvoiceId').textContent = '#' + invoiceData.invoiceId;
+            document.getElementById('templateClientName').textContent = invoiceData.clientName;
+            document.getElementById('templateClientEmail').textContent = invoiceData.clientEmail;
+            document.getElementById('templateDate').textContent = invoiceData.date;
+            document.getElementById('templateReservationId').textContent = invoiceData.reservationId;
+
+            // Populate items table
+            const itemsBody = document.getElementById('templateItemsBody');
+            itemsBody.innerHTML = ''; // Clear previous items
+            invoiceData.items.forEach(item => {
+                const row = itemsBody.insertRow();
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.description}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.unitPrice.toFixed(2)} €</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.total.toFixed(2)} €</td>
+                `;
+            });
+
+            // Populate totals
+            document.getElementById('templateSubTotal').textContent = invoiceData.subTotal.toFixed(2) + ' €';
+            document.getElementById('templateVat').textContent = invoiceData.vat.toFixed(2) + ' €';
+            document.getElementById('templateTotalAmount').textContent = invoiceData.totalAmount.toFixed(2) + ' €';
+
+            template.classList.remove('hidden');
             window.print();
-            invoice.classList.add('hidden');
+            template.classList.add('hidden');
         }
 
         function generateAllInvoicesPDF() {
-            const invoice = document.getElementById('invoiceTemplate');
-            invoice.classList.remove('hidden');
-            window.print();
-            invoice.classList.add('hidden');
+            if (allInvoices.length > 0) {
+                printInvoice(allInvoices[0]); // Print the first invoice as an example
+            } else {
+                alert("Aucune facture à imprimer.");
+            }
         }
 
         // Tab switching functionality
