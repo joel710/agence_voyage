@@ -31,8 +31,10 @@
         #mainContent {
             flex: 1;
             transition: margin-left 0.3s ease;
-            margin-left: 250px; /* Correspond à la largeur de la sidebar */
-            min-width: 0; /* Correction overflow flex */
+            margin-left: 250px;
+            /* Correspond à la largeur de la sidebar */
+            min-width: 0;
+            /* Correction overflow flex */
         }
 
         /* État réduit de la sidebar */
@@ -41,7 +43,7 @@
             min-width: 80px;
         }
 
-        .sidebar-collapsed + #mainContent {
+        .sidebar-collapsed+#mainContent {
             margin-left: 80px;
         }
 
@@ -71,8 +73,16 @@
             }
 
             #mainContent {
-                margin-left: 0 !important;
+                margin-left: 0;
+                /* Removed !important */
                 width: 100%;
+                transition: margin-left 0.3s ease;
+                /* Ensure smooth transition */
+            }
+
+            #mainContent.sidebar-open-mobile {
+                margin-left: 250px;
+                /* Pushes content when sidebar is open */
             }
 
             .sidebar-collapsed {
@@ -86,11 +96,23 @@
         }
 
         .nav-item:focus-within {
-            outline: 2px solid rgba(59, 130, 246, 0.5);
+            outline: 2px solid rgba(14, 165, 233, 0.5);
+            /* sky-500 with 0.5 alpha */
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236B7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E');
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
         }
 
         /* Transition globale */
-        .modal, .chart-container {
+        .modal,
+        .chart-container {
             transition: opacity 0.3s ease;
         }
 
@@ -103,8 +125,8 @@
 <body class="bg-gray-100 font-sans">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div id="sidebar" class="sidebar bg-blue-800 text-white transition-all duration-300 ease-in-out fixed h-full">
-            <div class="p-4 flex items-center justify-between border-b border-blue-700">
+        <div id="sidebar" class="sidebar bg-slate-700 text-white transition-all duration-300 ease-in-out fixed h-full">
+            <div class="p-4 flex items-center justify-between border-b border-slate-600">
                 <div class="flex items-center">
                     <i class="fas fa-plane text-2xl logo-icon" style="display: none;"></i>
                     <span class="logo-text text-xl font-bold">VoyagePro</span>
@@ -116,37 +138,37 @@
             <nav class="mt-6">
                 <div>
                     <a href="#" data-section="dashboard"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         <span class="nav-text">Tableau de bord</span>
                     </a>
                     <a href="#" data-section="clients"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-users mr-3"></i>
                         <span class="nav-text">Clients</span>
                     </a>
                     <a href="#" data-section="agents"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-user-tie mr-3"></i>
                         <span class="nav-text">Agents</span>
                     </a>
                     <a href="#" data-section="voyages"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-plane-departure mr-3"></i>
                         <span class="nav-text">Voyages</span>
                     </a>
                     <a href="#" data-section="billets"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-ticket-alt mr-3"></i>
                         <span class="nav-text">Types de billet</span>
                     </a>
                     <a href="#" data-section="reservations"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-calendar-check mr-3"></i>
                         <span class="nav-text">Réservations</span>
                     </a>
                     <a href="#" data-section="paiements"
-                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-blue-700 transition-colors duration-200">
+                        class="nav-item flex items-center px-4 py-3 text-white hover:bg-slate-600 transition-colors duration-200">
                         <i class="fas fa-credit-card mr-3"></i>
                         <span class="nav-text">Paiements</span>
                     </a>
@@ -207,7 +229,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <div class="bg-white rounded-lg shadow p-6">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+                                <div class="p-3 rounded-full bg-sky-100 text-sky-600 mr-4">
                                     <i class="fas fa-users text-xl"></i>
                                 </div>
                                 <div>
@@ -240,7 +262,7 @@
                         </div>
                         <div class="bg-white rounded-lg shadow p-6">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                                <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 mr-4">
                                     <i class="fas fa-dollar-sign text-xl"></i>
                                 </div>
                                 <div>
@@ -267,7 +289,7 @@
                                         <span>42%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 42%"></div>
+                                        <div class="bg-sky-600 h-2 rounded-full" style="width: 42%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -276,7 +298,7 @@
                                         <span>28%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 28%"></div>
+                                        <div class="bg-sky-600 h-2 rounded-full" style="width: 28%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -285,7 +307,7 @@
                                         <span>15%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 15%"></div>
+                                        <div class="bg-sky-600 h-2 rounded-full" style="width: 15%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -294,7 +316,7 @@
                                         <span>8%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 8%"></div>
+                                        <div class="bg-sky-600 h-2 rounded-full" style="width: 8%"></div>
                                     </div>
                                 </div>
                                 <div>
@@ -303,7 +325,7 @@
                                         <span>7%</span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 7%"></div>
+                                        <div class="bg-sky-600 h-2 rounded-full" style="width: 7%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -358,7 +380,7 @@
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Confirmée</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Voir</button>
+                                            <button class="text-sky-600 hover:text-sky-800 mr-3">Voir</button>
                                             <button class="text-red-600 hover:text-red-900">Annuler</button>
                                         </td>
                                     </tr>
@@ -387,7 +409,7 @@
                                                 attente</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Voir</button>
+                                            <button class="text-sky-600 hover:text-sky-800 mr-3">Voir</button>
                                             <button class="text-red-600 hover:text-red-900">Annuler</button>
                                         </td>
                                     </tr>
@@ -402,7 +424,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gestion des clients</h2>
                         <button id="addClientBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+                            class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
                             <i class="fas fa-plus mr-2"></i> Ajouter un client
                         </button>
                     </div>
@@ -415,12 +437,12 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                                 <div class="flex space-x-2">
                                     <select
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                         <option>Tous</option>
                                         <option>Homme</option>
                                         <option>Femme</option>
@@ -473,7 +495,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Femme</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-client">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-client">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-client">Supprimer</button>
                                         </td>
@@ -497,7 +519,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Homme</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-client">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-client">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-client">Supprimer</button>
                                         </td>
@@ -530,7 +552,7 @@
                                             <i class="fas fa-chevron-left"></i>
                                         </a>
                                         <a href="#" aria-current="page"
-                                            class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
+                                            class="z-10 bg-sky-50 border-sky-500 text-sky-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
                                         <a href="#"
                                             class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
                                         <a href="#"
@@ -552,7 +574,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gestion des agents</h2>
                         <button id="addAgentBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+                            class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
                             <i class="fas fa-plus mr-2"></i> Ajouter un agent
                         </button>
                     </div>
@@ -565,12 +587,12 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                                 <div class="flex space-x-2">
                                     <select
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                         <option>Tous les rôles</option>
                                         <option>Admin</option>
                                         <option>Agent</option>
@@ -622,11 +644,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Admin</span>
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-sky-100 text-sky-800">Admin</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-agent">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-agent">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-agent">Supprimer</button>
                                         </td>
@@ -649,11 +671,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Agent</span>
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800">Agent</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-agent">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-agent">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-agent">Supprimer</button>
                                         </td>
@@ -669,7 +691,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gestion des voyages</h2>
                         <button id="addVoyageBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+                            class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
                             <i class="fas fa-plus mr-2"></i> Ajouter un voyage
                         </button>
                     </div>
@@ -682,12 +704,12 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                                 <div class="flex space-x-2">
                                     <select
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                         <option>Toutes destinations</option>
                                         <option>Paris</option>
                                         <option>New York</option>
@@ -730,7 +752,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$450</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-voyage">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-voyage">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-voyage">Supprimer</button>
                                         </td>
@@ -743,7 +765,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$780</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-voyage">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-voyage">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-voyage">Supprimer</button>
                                         </td>
@@ -759,7 +781,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Types de billets</h2>
                         <button id="addBilletBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+                            class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
                             <i class="fas fa-plus mr-2"></i> Ajouter un type
                         </button>
                     </div>
@@ -772,7 +794,7 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                             </div>
@@ -804,7 +826,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$250</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-billet">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-billet">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-billet">Supprimer</button>
                                         </td>
@@ -817,7 +839,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$450</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-billet">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-billet">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-billet">Supprimer</button>
                                         </td>
@@ -830,7 +852,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$850</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-billet">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-billet">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-billet">Supprimer</button>
                                         </td>
@@ -846,7 +868,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gestion des réservations</h2>
                         <button id="addReservationBtn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center">
+                            class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
                             <i class="fas fa-plus mr-2"></i> Ajouter une réservation
                         </button>
                     </div>
@@ -859,12 +881,12 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                                 <div class="flex space-x-2">
                                     <select
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                         <option>Tous statuts</option>
                                         <option>Confirmée</option>
                                         <option>En attente</option>
@@ -918,7 +940,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-reservation">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-reservation">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-reservation">Annuler</button>
                                         </td>
@@ -940,7 +962,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button
-                                                class="text-blue-600 hover:text-blue-900 mr-3 edit-reservation">Modifier</button>
+                                                class="text-sky-600 hover:text-sky-800 mr-3 edit-reservation">Modifier</button>
                                             <button
                                                 class="text-red-600 hover:text-red-900 delete-reservation">Annuler</button>
                                         </td>
@@ -956,6 +978,10 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gestion des paiements</h2>
                         <div class="flex space-x-2">
+                            <button id="addPaiementBtn"
+                                class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                                <i class="fas fa-plus mr-2"></i> Ajouter un paiement
+                            </button>
                             <button
                                 class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                                 <i class="fas fa-file-export mr-1"></i> Exporter
@@ -975,18 +1001,18 @@
                                         <i class="fas fa-search text-gray-400"></i>
                                     </div>
                                     <input type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                                         placeholder="Rechercher...">
                                 </div>
                                 <div class="flex space-x-2">
                                     <select
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                         <option>Tous les agents</option>
                                         <option>Marie Lambert</option>
                                         <option>Thomas Moreau</option>
                                     </select>
                                     <input type="date"
-                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                        class="block w-full md:w-auto pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
                                     <button
                                         class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                                         <i class="fas fa-filter mr-1"></i> Filtrer
@@ -1030,7 +1056,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Marie Lambert</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Facture</button>
+                                            <button class="text-sky-600 hover:text-sky-800 mr-3">Facture</button>
                                             <button class="text-red-600 hover:text-red-900">Rembourser</button>
                                         </td>
                                     </tr>
@@ -1045,7 +1071,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Thomas Moreau</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Facture</button>
+                                            <button class="text-sky-600 hover:text-sky-800 mr-3">Facture</button>
                                             <button class="text-red-600 hover:text-red-900">Rembourser</button>
                                         </td>
                                     </tr>
@@ -1073,27 +1099,27 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nom</label>
                         <input type="text"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Prénom</label>
                         <input type="text"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Téléphone</label>
                         <input type="tel"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Sexe</label>
                         <select
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                             <option>Sélectionner</option>
                             <option>Homme</option>
                             <option>Femme</option>
@@ -1103,32 +1129,289 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Date de naissance</label>
                         <input type="date"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Login</label>
                         <input type="text"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Mot de passe</label>
                         <input type="password"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
                     <button type="button"
-                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                         Annuler
                     </button>
                     <button type="submit"
-                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                         Enregistrer
                     </button>
                 </div>
             </form>
         </div>
     </div>
+    <!-- Add Agent Modal -->
+    <div id="agentModal" class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-lg font-semibold">Ajouter un Agent</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nomAgent" class="block text-sm font-medium text-gray-700">Nom</label>
+                        <input type="text" name="nomAgent" id="nomAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="prenomAgent" class="block text-sm font-medium text-gray-700">Prénom</label>
+                        <input type="text" name="prenomAgent" id="prenomAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="sexeAgent" class="block text-sm font-medium text-gray-700">Sexe</label>
+                        <select id="sexeAgent" name="sexeAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner</option>
+                            <option value="Homme">Homme</option>
+                            <option value="Femme">Femme</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dateNaissAgent" class="block text-sm font-medium text-gray-700">Date de
+                            naissance</label>
+                        <input type="date" name="dateNaissAgent" id="dateNaissAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="telAgent" class="block text-sm font-medium text-gray-700">Téléphone</label>
+                        <input type="tel" name="telAgent" id="telAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="mailAgent" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" name="mailAgent" id="mailAgent"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End of Agent Modal -->
+
+    <!-- Add Voyage Modal -->
+    <div id="voyageModal" class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-lg font-semibold">Ajouter un Voyage</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="departVoyage" class="block text-sm font-medium text-gray-700">Lieu de départ</label>
+                        <input type="text" name="departVoyage" id="departVoyage"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="arriveeVoyage" class="block text-sm font-medium text-gray-700">Lieu
+                            d\'arrivée</label>
+                        <input type="text" name="arriveeVoyage" id="arriveeVoyage"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="dateVoyage" class="block text-sm font-medium text-gray-700">Date du voyage</label>
+                        <input type="date" name="dateVoyage" id="dateVoyage"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End of Voyage Modal -->
+
+    <!-- Add Type Billet Modal -->
+    <div id="typeBilletModal"
+        class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-lg font-semibold">Ajouter un Type de Billet</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="libelleTypeBillet" class="block text-sm font-medium text-gray-700">Libellé</label>
+                        <input type="text" name="libelleTypeBillet" id="libelleTypeBillet"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="prixTypeBillet" class="block text-sm font-medium text-gray-700">Prix</label>
+                        <input type="number" step="0.01" name="prixTypeBillet" id="prixTypeBillet"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End of Type Billet Modal -->
+
+    <!-- Add Reservation Modal -->
+    <div id="reservationModal"
+        class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-lg font-semibold">Ajouter une Réservation</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="dateReservation" class="block text-sm font-medium text-gray-700">Date de
+                            réservation</label>
+                        <input type="date" name="dateReservation" id="dateReservation"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="idClientReservation" class="block text-sm font-medium text-gray-700">Client</label>
+                        <select id="idClientReservation" name="idClientReservation"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner Client</option>
+                            <!-- Options to be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="idVoyageReservation" class="block text-sm font-medium text-gray-700">Voyage</label>
+                        <select id="idVoyageReservation" name="idVoyageReservation"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner Voyage</option>
+                            <!-- Options to be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="idTypeBilletReservation" class="block text-sm font-medium text-gray-700">Type de
+                            Billet</label>
+                        <select id="idTypeBilletReservation" name="idTypeBilletReservation"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner Type</option>
+                            <!-- Options to be populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End of Reservation Modal -->
+
+    <!-- Add Paiement Modal -->
+    <div id="paiementModal" class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-lg font-semibold">Ajouter un Paiement</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="codePaiement" class="block text-sm font-medium text-gray-700">Code Paiement</label>
+                        <input type="text" name="codePaiement" id="codePaiement"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="datePaiement" class="block text-sm font-medium text-gray-700">Date de
+                            paiement</label>
+                        <input type="date" name="datePaiement" id="datePaiement"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="idReservationPaiement"
+                            class="block text-sm font-medium text-gray-700">Réservation</label>
+                        <select id="idReservationPaiement" name="idReservationPaiement"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner Réservation</option>
+                            <!-- Options to be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="idAgentPaiement" class="block text-sm font-medium text-gray-700">Agent</label>
+                        <select id="idAgentPaiement" name="idAgentPaiement"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+                            <option value="">Sélectionner Agent</option>
+                            <!-- Options to be populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End of Paiement Modal -->
 
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
@@ -1144,7 +1427,7 @@
             </div>
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button"
-                    class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    class="close-modal px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                     Annuler
                 </button>
                 <button type="button"
@@ -1170,6 +1453,7 @@
 
         mobileToggle.addEventListener('click', () => {
             sidebar.classList.toggle('active');
+            mainContent.classList.toggle('sidebar-open-mobile');
         });
 
         // User menu
@@ -1198,8 +1482,8 @@
                 const section = item.getAttribute('data-section');
 
                 // Update active nav item
-                navItems.forEach(nav => nav.classList.remove('bg-blue-700'));
-                item.classList.add('bg-blue-700');
+                navItems.forEach(nav => nav.classList.remove('bg-slate-600'));
+                item.classList.add('bg-slate-600');
 
                 // Show selected section
                 sectionContents.forEach(content => content.classList.add('hidden'));
@@ -1222,13 +1506,61 @@
         const addClientBtn = document.getElementById('addClientBtn');
         const clientModal = document.getElementById('clientModal');
         const deleteModal = document.getElementById('deleteModal');
+
+        const addAgentBtn = document.getElementById('addAgentBtn');
+        const agentModal = document.getElementById('agentModal');
+
+        const addVoyageBtn = document.getElementById('addVoyageBtn');
+        const voyageModal = document.getElementById('voyageModal');
+
+        const addBilletBtn = document.getElementById('addBilletBtn');
+        const typeBilletModal = document.getElementById('typeBilletModal');
+
+        const addReservationBtn = document.getElementById('addReservationBtn');
+        const reservationModal = document.getElementById('reservationModal');
+
+        const addPaiementBtn = document.getElementById('addPaiementBtn');
+        const paiementModal = document.getElementById('paiementModal');
+
         const deleteButtons = document.querySelectorAll('.delete-client, .delete-agent, .delete-voyage, .delete-billet, .delete-reservation');
         const confirmDelete = document.querySelector('.confirm-delete');
 
         // Open add client modal
-        addClientBtn.addEventListener('click', () => {
-            clientModal.classList.remove('hidden');
-        });
+        if (addClientBtn && clientModal) { // Keep existing check for robustness
+            addClientBtn.addEventListener('click', () => {
+                clientModal.classList.remove('hidden');
+            });
+        }
+
+        if (addAgentBtn && agentModal) {
+            addAgentBtn.addEventListener('click', () => {
+                agentModal.classList.remove('hidden');
+            });
+        }
+
+        if (addVoyageBtn && voyageModal) {
+            addVoyageBtn.addEventListener('click', () => {
+                voyageModal.classList.remove('hidden');
+            });
+        }
+
+        if (addBilletBtn && typeBilletModal) {
+            addBilletBtn.addEventListener('click', () => {
+                typeBilletModal.classList.remove('hidden');
+            });
+        }
+
+        if (addReservationBtn && reservationModal) {
+            addReservationBtn.addEventListener('click', () => {
+                reservationModal.classList.remove('hidden');
+            });
+        }
+
+        if (addPaiementBtn && paiementModal) {
+            addPaiementBtn.addEventListener('click', () => {
+                paiementModal.classList.remove('hidden');
+            });
+        }
 
         // Open delete confirmation modal
         deleteButtons.forEach(button => {
@@ -1277,8 +1609,8 @@
                 datasets: [{
                     label: 'Réservations',
                     data: [12, 19, 15, 20, 25, 30, 35, 40, 32, 28, 22, 18],
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    borderColor: 'rgba(14, 165, 233, 1)',
                     borderWidth: 2,
                     tension: 0.4,
                     fill: true
@@ -1309,7 +1641,7 @@
         });
 
         // Set dashboard as active by default
-        document.querySelector('[data-section="dashboard"]').classList.add('bg-blue-700');
+        document.querySelector('[data-section="dashboard"]').classList.add('bg-slate-600');
     </script>
 </body>
 
