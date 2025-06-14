@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'; // Added ElementRef, ViewChild
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms'; // Added NgForm
-import { ClientHeaderComponent } from '../../components/client-header/client-header.component'; // Corrected path
+import { ClientHeaderComponent } from '../../components/client-header/client-header';
 import { RouterLink } from '@angular/router';
 
 // Interfaces (assuming they are defined as in the previous step for this component)
@@ -77,7 +77,8 @@ export class ClientDashboardPageComponent implements OnInit {
     alert('Recherche de vols simulée. Vérifiez la console pour les critères.');
   }
 
-  viewBookingDetails(booking: Booking): void { alert(\`Détails réservation: \${booking.idReservation}\`); }
+  viewBookingDetails(booking: Booking): void {
+    alert(\`Détails réservation: \${booking.idReservation}\`); }
 
   cancelBooking(bookingId: string): void {
     this.bookings = this.bookings.filter(b => b.idReservation !== bookingId);

@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, AfterViewInit, ElementRef, ViewChild } from '@angular/core'; // Added ElementRef, ViewChild
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import { AdminSidebarComponent, NavItem } from '../../components/admin-sidebar/admin-sidebar.component';
-import { AdminTopbarComponent } from '../../components/admin-topbar/admin-topbar.component';
+import { AdminSidebarComponent, NavItem } from '../../components/admin-sidebar/admin-sidebar';
+import { AdminTopbarComponent } from '../../components/admin-topbar/admin-topbar';
 import Chart from 'chart.js/auto'; // Ensure this import is present
 
 // Import Modal Components
-import { AddClientModalComponent, ClientData } from '../../components/admin/modals/add-client-modal/add-client-modal.component';
-import { AddAgentModalComponent, AgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal.component';
-import { AddVoyageModalComponent, VoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal.component';
-import { AddTypeBilletModalComponent, TypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal.component';
-import { AddReservationModalComponent, ReservationData, BasicClientInfo, BasicVoyageInfo, BasicTypeBilletInfo } from '../../components/admin/modals/add-reservation-modal/add-reservation-modal.component';
-import { AddPaiementModalComponent, PaiementData, BasicReservationInfo, BasicAgentInfo } from '../../components/admin/modals/add-paiement-modal/add-paiement-modal.component';
-import { DeleteConfirmationModalComponent } from '../../components/admin/modals/delete-confirmation-modal/delete-confirmation-modal.component';
+import { AddClientModalComponent, ClientData } from '../../components/admin/modals/add-client-modal/add-client-modal';
+import { AddAgentModalComponent, AgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal';
+import { AddVoyageModalComponent, VoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal';
+import { AddTypeBilletModalComponent, TypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal';
+import { AddReservationModalComponent, ReservationData, BasicClientInfo, BasicVoyageInfo, BasicTypeBilletInfo } from '../../components/admin/modals/add-reservation-modal/add-reservation-modal';
+import { AddPaiementModalComponent, PaiementData, BasicReservationInfo, BasicAgentInfo } from '../../components/admin/modals/add-paiement-modal/add-paiement-modal';
+import { DeleteConfirmationModalComponent } from '../../components/admin/modals/delete-confirmation-modal/delete-confirmation-modal';
 
 export interface LatestReservation {
   clientName: string; clientEmail: string; clientImage: string;
@@ -73,7 +73,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   latestReservations: LatestReservation[] = [];
   clientsList: ClientData[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.checkIfMobileView();
@@ -92,14 +92,14 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { clientName: 'Jean Dupont', clientEmail: 'jean@example.com', clientImage: 'https://randomuser.me/api/portraits/men/42.jpg', destination: 'New York, USA', date: '22/07/2023', status: 'En attente', statusClass: 'bg-yellow-100 text-yellow-800' }
     ];
     this.clientsList = [
-      { id: '1', nom: 'Martin', prenom: 'Sophie', email: 'sophie@example.com', telephone: '06 12 34 56 78', sexe: 'Femme', dateNaissance:'1990-01-01', login:'sophieM' }, // Removed avatar, not in ClientData
-      { id: '2', nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com', telephone: '07 89 01 23 45', sexe: 'Homme', dateNaissance:'1985-05-05', login:'jeanD' }, // Removed avatar
+      { id: '1', nom: 'Martin', prenom: 'Sophie', email: 'sophie@example.com', telephone: '06 12 34 56 78', sexe: 'Femme', dateNaissance: '1990-01-01', login: 'sophieM' }, // Removed avatar, not in ClientData
+      { id: '2', nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com', telephone: '07 89 01 23 45', sexe: 'Homme', dateNaissance: '1985-05-05', login: 'jeanD' }, // Removed avatar
     ];
-    this.sampleClientsForModal = this.clientsList.map(c => ({id: c.id!, name: `${c.prenom} ${c.nom}`}));
-    this.sampleVoyagesForModal = [ {id: 'v1', label: 'Paris -> NYC (20/12/2023)'}, {id: 'v2', label: 'Lyon -> Rome (15/01/2024)'}];
-    this.sampleBilletsForModal = [ {id: 'b1', libelle: 'Eco'}, {id: 'b2', libelle: 'Business'}];
-    this.sampleReservationsForModal = [ {id: 'r1', label: 'RES001 - S.Martin'}, {id: 'r2', label: 'RES002 - J.Dupont'}];
-    this.sampleAgentsForModal = [ {id: 'ag1', name: 'Agent Smith'}, {id: 'ag2', name: 'Agent Jones'}];
+    this.sampleClientsForModal = this.clientsList.map(c => ({ id: c.id!, name: `${c.prenom} ${c.nom}` }));
+    this.sampleVoyagesForModal = [{ id: 'v1', label: 'Paris -> NYC (20/12/2023)' }, { id: 'v2', label: 'Lyon -> Rome (15/01/2024)' }];
+    this.sampleBilletsForModal = [{ id: 'b1', libelle: 'Eco' }, { id: 'b2', libelle: 'Business' }];
+    this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }];
+    this.sampleAgentsForModal = [{ id: 'ag1', name: 'Agent Smith' }, { id: 'ag2', name: 'Agent Jones' }];
   }
 
   @HostListener('window:resize', ['$event'])
@@ -109,11 +109,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     const wasMobile = this.isMobileView;
     this.isMobileView = window.innerWidth < 768;
     if (wasMobile !== this.isMobileView) {
-        if (this.isMobileView && this.isSidebarCollapsed && !this.isMobileSidebarOpen) {
-            this.isSidebarCollapsed = false;
-        } else if (!this.isMobileView) {
-            this.isMobileSidebarOpen = false;
-        }
+      if (this.isMobileView && this.isSidebarCollapsed && !this.isMobileSidebarOpen) {
+        this.isSidebarCollapsed = false;
+      } else if (!this.isMobileView) {
+        this.isMobileSidebarOpen = false;
+      }
     }
     // Removed cdr.detectChanges() as it might be problematic if not needed or cause change detection cycles.
     // Angular should pick up changes to isMobileView. If issues arise, it can be re-added.
@@ -133,7 +133,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     this.currentPageTitle = item.label;
     const newSection = item.sectionId || 'dashboard';
     if (this.currentSection !== newSection && this.currentSection === 'dashboard') {
-        this.destroyChart();
+      this.destroyChart();
     }
     this.currentSection = newSection;
     if (this.isMobileView) {
@@ -177,12 +177,12 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   openAddReservationModal(): void { this.reservationToEdit = null; this.isAddReservationModalOpen = true; }
   openEditReservationModal(reservation: ReservationData): void { this.reservationToEdit = reservation; this.isAddReservationModalOpen = true; }
   closeReservationModal(): void { this.isAddReservationModalOpen = false; this.reservationToEdit = null; }
-  handleSaveReservation(reservation: ReservationData): void { console.log('Saving reservation:', reservation); this.closeReservationModal(); this.showNotification('Réservation enregistrée.'); }
+  handleSaveReservation(reservation: ReservationData): void { this.closeReservationModal(); this.showNotification('Réservation enregistrée.'); }
 
   openAddPaiementModal(): void { this.paiementToEdit = null; this.isAddPaiementModalOpen = true; }
   openEditPaiementModal(paiement: PaiementData): void { this.paiementToEdit = paiement; this.isAddPaiementModalOpen = true; }
   closePaiementModal(): void { this.isAddPaiementModalOpen = false; this.paiementToEdit = null; }
-  handleSavePaiement(paiement: PaiementData): void { console.log('Saving paiement:', paiement); this.closePaiementModal(); this.showNotification('Paiement enregistré.'); }
+  handleSavePaiement(paiement: PaiementData): void { this.closePaiementModal(); this.showNotification('Paiement enregistré.'); }
 
   openDeleteModal(id: string | number, name: string, deleteLogic: () => void): void {
     this.itemToDeleteId = id; this.itemToDeleteName = name; this.deleteAction = deleteLogic; this.isDeleteModalOpen = true;
@@ -252,5 +252,9 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
 
   ngOnDestroy(): void {
     this.destroyChart();
+  }
+
+  onDeleteClient(client: ClientData): void {
+    this.openDeleteModal(client.id!, client.prenom + ' ' + client.nom, () => this.deleteClientAction(client.id!));
   }
 }

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { HeaderComponent } from '../../components/header/header.component'; // Adjusted path
-import { FooterComponent } from '../../components/footer/footer.component'; // Adjusted path
+import { HeaderComponent } from '../../components/header/header';
+import { FooterComponent } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-login-page',

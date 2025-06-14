@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms'; // Removed AbstractControl, ValidationErrors, ValidatorFn if matchPasswordValidator is not used here yet
 import { RouterLink } from '@angular/router';
-import { HeaderComponent } from '../../components/header/header.component'; // Adjusted path
-import { FooterComponent } from '../../components/footer/footer.component'; // Adjusted path
+import { HeaderComponent } from '../../components/header/header';
+import { FooterComponent } from '../../components/footer/footer';
 
 // matchPasswordValidator removed for now, will be addressed in form validation step if needed as a directive
 
