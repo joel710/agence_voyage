@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Required for *ngIf, *ngFor
-import { RouterLink } from '@angular/router'; // If any links become routerLinks
 
 @Component({
   selector: 'app-client-header',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './client-header.html', // Corrected
   styleUrls: ['./client-header.css']
 })

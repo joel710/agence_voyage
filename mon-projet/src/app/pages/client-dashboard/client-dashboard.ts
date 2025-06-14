@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'; // Add
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms'; // Added NgForm
 import { ClientHeaderComponent } from '../../components/client-header/client-header';
-import { RouterLink } from '@angular/router';
 
 // Interfaces (assuming they are defined as in the previous step for this component)
 export interface Booking {
@@ -25,7 +24,7 @@ export interface Payment {
 @Component({
   selector: 'app-client-dashboard-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClientHeaderComponent, RouterLink],
+  imports: [CommonModule, FormsModule, ClientHeaderComponent],
   templateUrl: './client-dashboard.html', // Corrected
   styleUrls: ['./client-dashboard.css']  // Corrected
 })
@@ -78,11 +77,11 @@ export class ClientDashboardPageComponent implements OnInit {
   }
 
   viewBookingDetails(booking: Booking): void {
-    alert(\`Détails réservation: \${booking.idReservation}\`); }
+    alert(`Détails réservation: ${booking.idReservation}`); }
 
   cancelBooking(bookingId: string): void {
     this.bookings = this.bookings.filter(b => b.idReservation !== bookingId);
-    alert(\`Réservation \${bookingId} annulée (simulation)\`);
+    alert(`Réservation ${bookingId} annulée (simulation)`);
   }
 
   printInvoice(invoice: Invoice): void {
@@ -93,21 +92,21 @@ export class ClientDashboardPageComponent implements OnInit {
 
     let itemsHtml = '';
     invoice.items.forEach(item => {
-      itemsHtml += \`<tr>
-        <td style="padding: 8px; border: 1px solid #ddd; text-align: left;">\${item.description}</td>
-        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">\${item.quantity}</td>
-        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">\${item.unitPrice.toFixed(2)} €</td>
-        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">\${item.total.toFixed(2)} €</td>
-      </tr>\`;
+      itemsHtml += `<tr>
+        <td style="padding: 8px; border: 1px solid #ddd; text-align: left;">${item.description}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${item.unitPrice.toFixed(2)} €</td>
+        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${item.total.toFixed(2)} €</td>
+      </tr>`;
     });
 
-    templateEl.innerHTML = \`
+    templateEl.innerHTML = `
       <div style="max-width: 800px; margin: auto; background-color: white; padding: 30px; font-family: Arial, sans-serif; line-height: 1.6;">
         <table style="width: 100%; margin-bottom: 30px;">
           <tr>
             <td style="width: 50%;">
               <h1 style="font-size: 24px; font-weight: bold; color: #333; margin:0;">Facture</h1>
-              <p style="color: #555; margin-top: 4px;">#\${invoice.invoiceId}</p>
+              <p style="color: #555; margin-top: 4px;">#${invoice.invoiceId}</p>
             </td>
             <td style="width: 50%; text-align: right;">
               <p style="color: #555; margin:0;">TravelEase</p>
@@ -120,11 +119,11 @@ export class ClientDashboardPageComponent implements OnInit {
           <tr>
             <td style="width: 50%;">
               <h3 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom:8px;">Facturé à</h3>
-              <p style="color: #555; margin:0;">\${invoice.clientName}</p>
+              <p style="color: #555; margin:0;">${invoice.clientName}</p>
             </td>
             <td style="width: 50%; text-align: right;">
-              <p style="color: #555; margin:0;">Date: <span style="font-weight:bold;">\${invoice.date}</span></p>
-              <p style="color: #555; margin:0;">Réservation: <span style="font-weight:bold;">\${invoice.reservationId}</span></p>
+              <p style="color: #555; margin:0;">Date: <span style="font-weight:bold;">${invoice.date}</span></p>
+              <p style="color: #555; margin:0;">Réservation: <span style="font-weight:bold;">${invoice.reservationId}</span></p>
             </td>
           </tr>
         </table>
@@ -136,27 +135,27 @@ export class ClientDashboardPageComponent implements OnInit {
               <th style="padding: 12px; border: 1px solid #ddd; text-align: right; font-size: 12px; font-weight: bold; color: #333; text-transform: uppercase;">Prix unitaire</th>
               <th style="padding: 12px; border: 1px solid #ddd; text-align: right; font-size: 12px; font-weight: bold; color: #333; text-transform: uppercase;">Total</th>
             </tr></thead>
-            <tbody>\${itemsHtml}</tbody>
+            <tbody>${itemsHtml}</tbody>
           </table>
         </div>
         <table style="width: 100%;"><tr><td style="width:60%;"></td><td style="width:40%;">
           <table style="width: 100%;">
-            <tr><td style="padding: 4px 0; color: #555;">Total HT</td><td style="padding: 4px 0; text-align: right; color: #555;">\${invoice.subTotal.toFixed(2)} €</td></tr>
-            <tr><td style="padding: 4px 0; color: #555;">TVA (20%)</td><td style="padding: 4px 0; text-align: right; color: #555;">\${invoice.vat.toFixed(2)} €</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold; color: #333; border-top: 2px solid #ddd;">Total TTC</td><td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333; border-top: 2px solid #ddd;">\${invoice.totalAmount.toFixed(2)} €</td></tr>
+            <tr><td style="padding: 4px 0; color: #555;">Total HT</td><td style="padding: 4px 0; text-align: right; color: #555;">${invoice.subTotal.toFixed(2)} €</td></tr>
+            <tr><td style="padding: 4px 0; color: #555;">TVA (20%)</td><td style="padding: 4px 0; text-align: right; color: #555;">${invoice.vat.toFixed(2)} €</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold; color: #333; border-top: 2px solid #ddd;">Total TTC</td><td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333; border-top: 2px solid #ddd;">${invoice.totalAmount.toFixed(2)} €</td></tr>
           </table>
         </td></tr></table>
-      </div>\`;
+      </div>`;
 
     const style = document.createElement('style');
-    style.textContent = \`
+    style.textContent = `
       @media print {
         body * { visibility: hidden !important; }
         .print-section, .print-section * { visibility: visible !important; }
         .print-section { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; }
         @page { size: auto; margin: 20mm; } /* Added some margin for printing */
       }
-    \`;
+    `;
     document.head.appendChild(style);
     templateEl.classList.remove('hidden');
 
@@ -201,14 +200,24 @@ export class ClientDashboardPageComponent implements OnInit {
   }
   loadSampleData(): void {
      this.bookings = [
-      { idReservation: 'BOOK001', dateReservation: '2023-09-15', departVoyage: 'Paris (CDG)', arriveeVoyage: 'New York (JFK)', dateVoyage: '2023-10-01', typeBillet: 'business', status: 'confirmed', price: 1200.00 },
-      { idReservation: 'BOOK002', dateReservation: '2023-09-10', departVoyage: 'Lyon (LYS)', arriveeVoyage: 'Barcelone (BCN)', dateVoyage: '2023-10-15', typeBillet: 'economy', status: 'pending', price: 800.50 },
-    ].map(b => ({ ...b, statusText: this.getStatusInfo(b.status).text, statusClass: this.getStatusInfo(b.status).class, typeBilletText: this.getTicketTypeText(b.typeBillet) }));
+      { idReservation: 'BOOK001', dateReservation: '2023-09-15', departVoyage: 'Paris (CDG)', arriveeVoyage: 'New York (JFK)', dateVoyage: '2023-10-01', typeBillet: 'business' as Booking['typeBillet'], status: 'confirmed' as Booking['status'], price: 1200.00 },
+      { idReservation: 'BOOK002', dateReservation: '2023-09-10', departVoyage: 'Lyon (LYS)', arriveeVoyage: 'Barcelone (BCN)', dateVoyage: '2023-10-15', typeBillet: 'economy' as Booking['typeBillet'], status: 'pending' as Booking['status'], price: 800.50 },
+    ].map(b => {
+      const statusInfo = this.getStatusInfo(b.status);
+      const typeBilletText = this.getTicketTypeText(b.typeBillet);
+      return { ...b, statusText: statusInfo.text, statusClass: statusInfo.class, typeBilletText: typeBilletText };
+    });
     this.invoices = [
-      { invoiceId: 'INV001', date: '2023-09-15', reservationId: 'BOOK001', clientName: 'Sophie Martin', items: [{ description: 'Billet Business Paris → New York', quantity: 1, unitPrice: 1000.00, total: 1000.00 }], subTotal: 1000.00, vat: 200.00, totalAmount: 1200.00, status: 'Payée' },
-    ].map(i => ({ ...i, statusClass: this.getStatusInfo(i.status).class }));
+      { invoiceId: 'INV001', date: '2023-09-15', reservationId: 'BOOK001', clientName: 'Sophie Martin', items: [{ description: 'Billet Business Paris → New York', quantity: 1, unitPrice: 1000.00, total: 1000.00 }], subTotal: 1000.00, vat: 200.00, totalAmount: 1200.00, status: 'Payée' as Invoice['status'] },
+    ].map(i => {
+      const statusInfo = this.getStatusInfo(i.status);
+      return { ...i, statusClass: statusInfo.class };
+    });
     this.payments = [
-      { codePaiement: 'PAY001', datePaiement: '2023-09-15', idReservation: 'BOOK001', amount: 1200.00, status: 'Payée' },
-    ].map(p => ({ ...p, statusClass: this.getStatusInfo(p.status).class }));
+      { codePaiement: 'PAY001', datePaiement: '2023-09-15', idReservation: 'BOOK001', amount: 1200.00, status: 'Payée' as Payment['status'] },
+    ].map(p => {
+      const statusInfo = this.getStatusInfo(p.status);
+      return { ...p, statusClass: statusInfo.class };
+    });
   }
 }
