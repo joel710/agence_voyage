@@ -1,0 +1,53 @@
+/* Styles from dashboard-admin.html <style> tag that are relevant to mainContent and its interaction with sidebar */
+
+/* Contenu principal - Décalage dynamique */
+/* This is now handled by [class.ml-XX] and [ngClass] in admin-dashboard.component.html */
+/* #mainContent {
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    margin-left: 250px;
+    min-width: 0;
+} */
+
+/* État réduit de la sidebar - main content adjustment */
+/* This is now handled by [class.ml-XX] in admin-dashboard.component.html */
+/* .sidebar-collapsed + #mainContent {
+    margin-left: 80px;
+} */
+
+/* Adaptation mobile main content */
+/* The ngClass directive in admin-dashboard.component.html handles these dynamic margins based on isMobileView and isMobileSidebarOpen */
+/* @media (max-width: 768px) {
+  #mainContent {
+    margin-left: 0 !important; /* Important was used, review if necessary */
+    /* width: 100%;
+    transition: margin-left 0.3s ease;
+  } */
+
+  /* #mainContent.sidebar-open-mobile {
+    margin-left: 250px;
+  } */
+/* } */
+
+/* Chart container height - if not set by Tailwind */
+.chart-container {
+  height: 300px; /* Or use Tailwind h-XX class */
+}
+
+/* Ensure select dropdown arrows are visible if default browser styles are removed by Tailwind */
+/* This style might be global or scoped to specific components where selects are used. */
+/* For now, adding it here as it was in the original dashboard-admin.html styles. */
+/* Consider moving to a global stylesheet if this is a general fix for selects. */
+/* select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236B7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E');
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  padding-right: 2.5rem; /* Make space for the arrow */
+/* } */
+
+/* The select styling is commented out as it was in the prompt.
+   It's better handled by Tailwind or a global style if needed. */

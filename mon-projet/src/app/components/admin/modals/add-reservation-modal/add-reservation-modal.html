@@ -1,0 +1,67 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1000] flex items-center justify-center">
+  <div class="relative p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+    <div class="flex justify-between items-center pb-3 border-b">
+      <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>
+      <button (click)="closeModal.emit()" class="text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form (ngSubmit)="onSave(reservationForm)" #reservationForm="ngForm" class="mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="dateReservation" class="block text-sm font-medium text-gray-700">Date de réservation</label>
+          <input type="date" id="dateReservation" name="dateReservation" [(ngModel)]="reservationData.dateReservation" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="idClientReservation" class="block text-sm font-medium text-gray-700">Client</label>
+          <select id="idClientReservation" name="idClientReservation" [(ngModel)]="reservationData.clientId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Client</option>
+            <option *ngFor="let client of availableClients" [value]="client.id">{{ client.name }}</option>
+          </select>
+        </div>
+        <div>
+          <label for="idVoyageReservation" class="block text-sm font-medium text-gray-700">Voyage</label>
+          <select id="idVoyageReservation" name="idVoyageReservation" [(ngModel)]="reservationData.voyageId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Voyage</option>
+            <option *ngFor="let voyage of availableVoyages" [value]="voyage.id">{{ voyage.label }}</option> <!-- Assuming voyage has id and label -->
+          </select>
+        </div>
+        <div>
+          <label for="idTypeBilletReservation" class="block text-sm font-medium text-gray-700">Type de Billet</label>
+          <select id="idTypeBilletReservation" name="idTypeBilletReservation" [(ngModel)]="reservationData.typeBilletId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Type</option>
+            <option *ngFor="let billet of availableBillets" [value]="billet.id">{{ billet.libelle }}</option> <!-- Assuming billet has id and libelle -->
+          </select>
+        </div>
+        <div>
+          <label for="nombrePlaces" class="block text-sm font-medium text-gray-700">Nombre de places</label>
+          <input type="number" id="nombrePlaces" name="nombrePlaces" [(ngModel)]="reservationData.nombrePlaces" required min="1"
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="statutReservation" class="block text-sm font-medium text-gray-700">Statut</label>
+          <select id="statutReservation" name="statutReservation" [(ngModel)]="reservationData.statut" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="En attente">En attente</option>
+            <option value="Confirmée">Confirmée</option>
+            <option value="Annulée">Annulée</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end space-x-3">
+        <button type="button" (click)="closeModal.emit()"
+                class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="reservationForm.invalid"
+                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-50">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

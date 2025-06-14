@@ -1,0 +1,312 @@
+<div class="flex h-screen overflow-hidden">
+  <!-- Sidebar -->
+  <app-admin-sidebar
+    [isCollapsed]="isSidebarCollapsed"
+    (toggleCollapseClicked)="toggleSidebar()"
+    (navigate)="onSectionNavigate($event)">
+  </app-admin-sidebar>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="content flex-1 overflow-auto transition-all duration-300"
+       [class.ml-20]="isSidebarCollapsed && !isMobileView"
+       [class.ml-64]="!isSidebarCollapsed && !isMobileView"
+       [ngClass]="{'md:ml-20': isSidebarCollapsed, 'md:ml-64': !isSidebarCollapsed, 'ml-0': !isMobileSidebarOpen && isMobileView, 'ml-64': isMobileSidebarOpen && isMobileView }">
+
+    <!-- Topbar -->
+    <app-admin-topbar
+      [pageTitle]="currentPageTitle"
+      [userName]="adminUserName"
+      [userRole]="adminUserRole"
+      (mobileToggleClicked)="toggleMobileSidebar()">
+    </app-admin-topbar>
+
+    <!-- Notification (will be refactored into a service/component later) -->
+    <div id="notification" class="fixed top-20 right-4 z-[1000] hidden">
+        <div class="bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="notificationMessage">Action réussie !</span>
+        </div>
+    </div>
+
+    <!-- Main Content Sections -->
+    <main class="p-6">
+      <!-- Dashboard Section -->
+      <div id="dashboard-section" class="section-content" [class.hidden]="currentSection !== 'dashboard'">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="p-3 rounded-full bg-sky-100 text-sky-600 mr-4">
+                <i class="fas fa-users text-xl"></i>
+              </div>
+              <div>
+                <p class="text-gray-500">Clients</p>
+                <h3 class="text-2xl font-bold">1,248</h3>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                <i class="fas fa-calendar-check text-xl"></i>
+              </div>
+              <div>
+                <p class="text-gray-500">Réservations</p>
+                <h3 class="text-2xl font-bold">356</h3>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                <i class="fas fa-plane text-xl"></i>
+              </div>
+              <div>
+                <p class="text-gray-500">Voyages</p>
+                <h3 class="text-2xl font-bold">42</h3>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 mr-4">
+                <i class="fas fa-dollar-sign text-xl"></i>
+              </div>
+              <div>
+                <p class="text-gray-500">Revenus</p>
+                <h3 class="text-2xl font-bold">28 540 000 FCFA</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Réservations par mois</h3>
+            <div class="chart-container h-[300px]">
+              <canvas #reservationsChartCanvas></canvas>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Top destinations</h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between mb-1"><span>Paris, France</span><span>42%</span></div>
+                <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-sky-600 h-2 rounded-full" style="width: 42%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1"><span>New York, USA</span><span>28%</span></div>
+                <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-sky-600 h-2 rounded-full" style="width: 28%"></div></div>
+              </div>
+              <!-- More destinations -->
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Dernières réservations</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                  <tr *ngIf="latestReservations.length === 0">
+                      <td colspan="5" class="px-6 py-4 text-center text-gray-500">Aucune réservation récente.</td>
+                  </tr>
+                  <tr *ngFor="let resa of latestReservations">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                              <div class="flex-shrink-0 h-10 w-10">
+                                  <img class="h-10 w-10 rounded-full" [src]="resa.clientImage" alt="">
+                              </div>
+                              <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">{{ resa.clientName }}</div>
+                                  <div class="text-sm text-gray-500">{{ resa.clientEmail }}</div>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm text-gray-900">{{ resa.destination }}</div></td>
+                      <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm text-gray-900">{{ resa.date }}</div></td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [ngClass]="resa.statusClass">{{ resa.status }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <button class="text-sky-600 hover:text-sky-800 mr-3">Voir</button>
+                          <button class="text-red-600 hover:text-red-900">Annuler</button>
+                      </td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clients Section -->
+      <div id="clients-section" class="section-content" [class.hidden]="currentSection !== 'clients'">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Gestion des clients</h2>
+            <button (click)="openAddClientModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter un client
+            </button>
+        </div>
+        <!-- Client table structure (assuming a similar table structure) -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Liste des Clients</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Genre</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                  <tr *ngIf="clientsList.length === 0">
+                      <td colspan="5" class="px-6 py-4 text-center text-gray-500">Aucun client trouvé.</td>
+                  </tr>
+                  <tr *ngFor="let client of clientsList">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                              <div class="flex-shrink-0 h-10 w-10">
+                                  <img class="h-10 w-10 rounded-full" [src]="client.avatar || 'https://via.placeholder.com/40'" [alt]="client.prenom + ' ' + client.nom">
+                              </div>
+                              <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">{{ client.prenom }} {{ client.nom }}</div>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.email }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.telephone }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.sexe }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button (click)="openEditClientModal(client)" class="text-sky-600 hover:text-sky-800 mr-3 edit-client">Modifier</button>
+                          <button (click)="openDeleteModal(client.id!, client.prenom + ' ' + client.nom, () => deleteClientAction(client.id!))" class="text-red-600 hover:text-red-900 delete-client">Supprimer</button>
+                      </td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agents Section -->
+      <div id="agents-section" class="section-content" [class.hidden]="currentSection !== 'agents'">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Gestion des agents</h2>
+            <button (click)="openAddAgentModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter un agent
+            </button>
+        </div>
+        <p>Contenu de la section Agents...</p> <!-- Placeholder for agent table -->
+      </div>
+
+      <!-- Voyages Section -->
+      <div id="voyages-section" class="section-content" [class.hidden]="currentSection !== 'voyages'">
+         <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Gestion des voyages</h2>
+            <button (click)="openAddVoyageModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter un voyage
+            </button>
+        </div>
+        <p>Contenu de la section Voyages...</p> <!-- Placeholder for voyage table -->
+      </div>
+
+      <!-- Billets Section -->
+      <div id="billets-section" class="section-content" [class.hidden]="currentSection !== 'billets'">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Types de billets</h2>
+            <button (click)="openAddTypeBilletModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter un type
+            </button>
+        </div>
+        <p>Contenu de la section Billets...</p> <!-- Placeholder for type billet table -->
+      </div>
+
+      <!-- Reservations Section -->
+      <div id="reservations-section" class="section-content" [class.hidden]="currentSection !== 'reservations'">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Gestion des réservations</h2>
+            <button (click)="openAddReservationModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter une réservation
+            </button>
+        </div>
+        <p>Contenu de la section Réservations...</p> <!-- Placeholder for reservation table -->
+      </div>
+
+      <!-- Paiements Section -->
+      <div id="paiements-section" class="section-content" [class.hidden]="currentSection !== 'paiements'">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Gestion des paiements</h2>
+            <button (click)="openAddPaiementModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-plus mr-2"></i> Ajouter un paiement
+            </button>
+        </div>
+        <p>Contenu de la section Paiements...</p> <!-- Placeholder for paiement table -->
+      </div>
+    </main>
+
+    <!-- Modals -->
+    <app-add-client-modal
+      [isOpen]="isAddClientModalOpen"
+      [clientToEdit]="clientToEdit"
+      (closeModal)="closeClientModal()"
+      (saveClient)="handleSaveClient($event)">
+    </app-add-client-modal>
+
+    <app-add-agent-modal
+      [isOpen]="isAddAgentModalOpen"
+      [agentToEdit]="agentToEdit"
+      (closeModal)="closeAgentModal()"
+      (saveAgent)="handleSaveAgent($event)">
+    </app-add-agent-modal>
+
+    <app-add-voyage-modal
+      [isOpen]="isAddVoyageModalOpen"
+      [voyageToEdit]="voyageToEdit"
+      (closeModal)="closeVoyageModal()"
+      (saveVoyage)="handleSaveVoyage($event)">
+    </app-add-voyage-modal>
+
+    <app-add-type-billet-modal
+      [isOpen]="isAddTypeBilletModalOpen"
+      [typeBilletToEdit]="typeBilletToEdit"
+      (closeModal)="closeTypeBilletModal()"
+      (saveTypeBillet)="handleSaveTypeBillet($event)">
+    </app-add-type-billet-modal>
+
+    <app-add-reservation-modal
+      [isOpen]="isAddReservationModalOpen"
+      [reservationToEdit]="reservationToEdit"
+      [availableClients]="sampleClientsForModal"
+      [availableVoyages]="sampleVoyagesForModal"
+      [availableBillets]="sampleBilletsForModal"
+      (closeModal)="closeReservationModal()"
+      (saveReservation)="handleSaveReservation($event)">
+    </app-add-reservation-modal>
+
+    <app-add-paiement-modal
+      [isOpen]="isAddPaiementModalOpen"
+      [paiementToEdit]="paiementToEdit"
+      [availableReservations]="sampleReservationsForModal"
+      [availableAgents]="sampleAgentsForModal"
+      (closeModal)="closePaiementModal()"
+      (savePaiement)="handleSavePaiement($event)">
+    </app-add-paiement-modal>
+
+    <app-delete-confirmation-modal
+      [isOpen]="isDeleteModalOpen"
+      [itemName]="itemToDeleteName"
+      (closeModal)="closeDeleteModal()"
+      (confirmDelete)="handleConfirmDelete()">
+    </app-delete-confirmation-modal>
+  </div>
+</div>

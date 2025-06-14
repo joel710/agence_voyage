@@ -1,0 +1,38 @@
+/* Base styles are in admin-sidebar.component.html via Tailwind */
+/* Specific styles for collapsed state if not fully handled by Tailwind classes */
+
+/* Masquage du texte en mode réduit - handled by [class.hidden] in template */
+/* .sidebar-collapsed .nav-text, */
+/* .sidebar-collapsed .logo-text { */
+/* display: none; */
+/* } */
+
+/* .sidebar-collapsed .logo-icon { */
+/* display: block !important; */ /* Ensure this is handled or not needed */
+/* } */
+
+/* The main width/min-width and transition logic will be primarily managed by Tailwind classes in the HTML */
+/* and conditional classes applied by Angular based on isCollapsed state. */
+
+/* Mobile adaptations will be handled by the parent component (AdminDashboardPage)
+   and its interaction with this sidebar component (e.g., toggling a class for mobile view)
+   The original CSS had specific styles for mobile:
+    @media (max-width: 768px) {
+        #sidebar {
+            position: fixed;
+            left: -250px; // This will be controlled by parent component state
+            height: 100%;
+            transition: left 0.3s ease;
+            z-index: 1000; // Ensure this is appropriately set
+        }
+        #sidebar.active { // 'active' class for mobile open state
+            left: 0;
+            width: 250px;
+        }
+        .sidebar-collapsed { // This might need adjustment for mobile
+            left: -80px;
+        }
+    }
+   For now, we focus on the desktop collapsed/expanded state within this component.
+   Mobile state will be an Input property or managed by a service/parent.
+*/

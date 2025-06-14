@@ -1,0 +1,66 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1000] flex items-center justify-center">
+  <div class="relative p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+    <div class="flex justify-between items-center pb-3 border-b">
+      <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>
+      <button (click)="closeModal.emit()" class="text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form (ngSubmit)="onSave(paiementForm)" #paiementForm="ngForm" class="mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="codePaiement" class="block text-sm font-medium text-gray-700">Code Paiement</label>
+          <input type="text" id="codePaiement" name="codePaiement" [(ngModel)]="paiementData.codePaiement" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="datePaiement" class="block text-sm font-medium text-gray-700">Date de paiement</label>
+          <input type="date" id="datePaiement" name="datePaiement" [(ngModel)]="paiementData.datePaiement" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="montantPaiement" class="block text-sm font-medium text-gray-700">Montant (FCFA)</label>
+          <input type="number" id="montantPaiement" name="montantPaiement" [(ngModel)]="paiementData.montant" required min="0"
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="idReservationPaiement" class="block text-sm font-medium text-gray-700">Réservation</label>
+          <select id="idReservationPaiement" name="idReservationPaiement" [(ngModel)]="paiementData.reservationId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Réservation</option>
+            <option *ngFor="let resa of availableReservations" [value]="resa.id">{{ resa.label }}</option> <!-- resa.label e.g., "BOOK001 - Client Name" -->
+          </select>
+        </div>
+        <div>
+          <label for="idAgentPaiement" class="block text-sm font-medium text-gray-700">Agent</label>
+          <select id="idAgentPaiement" name="idAgentPaiement" [(ngModel)]="paiementData.agentId" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Agent</option>
+            <option *ngFor="let agent of availableAgents" [value]="agent.id">{{ agent.name }}</option>
+          </select>
+        </div>
+         <div>
+          <label for="methodePaiement" class="block text-sm font-medium text-gray-700">Méthode de paiement</label>
+          <select id="methodePaiement" name="methodePaiement" [(ngModel)]="paiementData.methode" required
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm pr-10">
+            <option value="">Sélectionner Méthode</option>
+            <option value="Carte de crédit">Carte de crédit</option>
+            <option value="Virement bancaire">Virement bancaire</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Espèces">Espèces</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end space-x-3">
+        <button type="button" (click)="closeModal.emit()"
+                class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="paiementForm.invalid"
+                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-50">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

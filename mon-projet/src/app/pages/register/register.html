@@ -1,0 +1,249 @@
+<app-header></app-header>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto bg-white rounded-2xl overflow-hidden card-shadow">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <!-- Section Image -->
+            <div class="travel-bg hidden lg:block relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-secondary/80"></div>
+                <div class="relative z-10 h-full flex flex-col justify-between p-12 text-white">
+                    <div>
+                        <h1 class="text-4xl font-bold mb-4">Commencez Votre Aventure</h1>
+                        <p class="text-xl opacity-90">Rejoignez notre communauté de voyageurs passionnés</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <p>Offre de bienvenue: 10% de réduction sur votre premier voyage</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>Accès aux offres exclusives réservées aux membres</p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="mr-4 text-2xl text-accent">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <p>Rencontrez d'autres voyageurs dans notre communauté</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire d'Inscription -->
+            <div class="p-8 sm:p-12 lg:p-16">
+                <h2 class="text-3xl font-bold text-center text-dark mb-2">Créez votre compte</h2>
+                <p class="text-gray-600 text-center mb-8">Rejoignez-nous en quelques étapes simples</p>
+
+                <form class="space-y-6 animate-in" (ngSubmit)="onRegisterSubmit(registrationForm)" #registrationForm="ngForm">
+                    <!-- Informations Personnelles -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Prénom -->
+                        <div>
+                            <label for="prenomClient" class="block text-gray-700 mb-2">Prénom</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text" id="prenomClient" name="prenomClient" [(ngModel)]="registerForm.prenomClient"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="Votre prénom" required #prenomClient="ngModel">
+                                <div *ngIf="prenomClient.invalid && (prenomClient.dirty || prenomClient.touched)" class="text-red-500 text-sm mt-1">Prénom requis.</div>
+                            </div>
+                        </div>
+
+                        <!-- Nom -->
+                        <div>
+                            <label for="nomClient" class="block text-gray-700 mb-2">Nom</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text" id="nomClient" name="nomClient" [(ngModel)]="registerForm.nomClient"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                    placeholder="Votre nom" required #nomClient="ngModel">
+                                <div *ngIf="nomClient.invalid && (nomClient.dirty || nomClient.touched)" class="text-red-500 text-sm mt-1">Nom requis.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date de Naissance -->
+                    <div>
+                        <label for="dateNaiss" class="block text-gray-700 mb-2">Date de Naissance</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-calendar-alt text-gray-400"></i>
+                            </div>
+                            <input type="date" id="dateNaiss" name="dateNaiss" [(ngModel)]="registerForm.dateNaiss"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                required #dateNaiss="ngModel">
+                            <div *ngIf="dateNaiss.invalid && (dateNaiss.dirty || dateNaiss.touched)" class="text-red-500 text-sm mt-1">Date de naissance requise.</div>
+                        </div>
+                    </div>
+
+                    <!-- Sexe -->
+                    <div>
+                        <label for="sexeClient" class="block text-gray-700 mb-2">Sexe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-venus-mars text-gray-400"></i>
+                            </div>
+                            <select id="sexeClient" name="sexeClient" [(ngModel)]="registerForm.sexeClient"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                required #sexeClient="ngModel">
+                                <option value="">Sélectionnez...</option>
+                                <option value="homme">Homme</option>
+                                <option value="femme">Femme</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                            <div *ngIf="sexeClient.invalid && (sexeClient.dirty || sexeClient.touched)" class="text-red-500 text-sm mt-1">Sexe requis.</div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Email -->
+                    <div>
+                        <label for="mailClient" class="block text-gray-700 mb-2">Adresse Email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input type="email" id="mailClient" name="mailClient" [(ngModel)]="registerForm.mailClient"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="votre@email.com" required email #mailClient="ngModel">
+                            <div *ngIf="mailClient.invalid && (mailClient.dirty || mailClient.touched)" class="text-red-500 text-sm mt-1">
+                                <span *ngIf="mailClient.errors?.['required']">Email requis.</span>
+                                <span *ngIf="mailClient.errors?.['email']">Format email invalide.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Téléphone -->
+                    <div>
+                        <label for="telClient" class="block text-gray-700 mb-2">Téléphone</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-phone text-gray-400"></i>
+                            </div>
+                            <input type="tel" id="telClient" name="telClient" [(ngModel)]="registerForm.telClient"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="+33 6 12 34 56 78">
+                        </div>
+                    </div>
+
+                    <!-- Login -->
+                    <div>
+                        <label for="login" class="block text-gray-700 mb-2">Login</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user-shield text-gray-400"></i>
+                            </div>
+                            <input type="text" id="login" name="login" [(ngModel)]="registerForm.login"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="Votre nom d'utilisateur" required #login="ngModel">
+                            <div *ngIf="login.invalid && (login.dirty || login.touched)" class="text-red-500 text-sm mt-1">Login requis.</div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Mot de passe -->
+                    <div>
+                        <label for="password" class="block text-gray-700 mb-2">Mot de passe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="registerForm.password"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="••••••••" required minlength="8" #password="ngModel">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                 <i class="cursor-pointer text-gray-400" [class]="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'" (click)="togglePasswordVisibility()"></i>
+                            </div>
+                        </div>
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-red-500 text-sm mt-1">
+                            <span *ngIf="password.errors?.['required']">Mot de passe requis.</span>
+                            <span *ngIf="password.errors?.['minlength']">Minimum 8 caractères.</span>
+                        </div>
+                        <p *ngIf="!(password.invalid && (password.dirty || password.touched))" class="mt-1 text-sm text-gray-500">Minimum 8 caractères avec des chiffres et lettres (validation à affiner).</p>
+                    </div>
+
+                    <!-- Confirmation Mot de passe -->
+                    <div>
+                        <label for="confirmPassword" class="block text-gray-700 mb-2">Confirmez le mot de passe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" [(ngModel)]="registerForm.confirmPassword"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary input-focus transition duration-300"
+                                placeholder="••••••••" required #confirmPassword="ngModel">
+                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                 <i class="cursor-pointer text-gray-400" [class]="showConfirmPassword ? 'fas fa-eye' : 'fas fa-eye-slash'" (click)="toggleConfirmPasswordVisibility()"></i>
+                            </div>
+                        </div>
+                         <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)" class="text-red-500 text-sm mt-1">
+                            <span *ngIf="confirmPassword.errors?.['required']">Confirmation requise.</span>
+                         </div>
+                         <div *ngIf="registrationForm.controls['confirmPassword']?.errors?.['passwordMismatch'] && (confirmPassword.dirty || confirmPassword.touched)" class="text-red-500 text-sm mt-1">
+                            Les mots de passe ne correspondent pas.
+                         </div>
+                    </div>
+
+                    <!-- Conditions et Newsletter -->
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" id="terms" name="terms" [(ngModel)]="registerForm.terms"
+                                    class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                    required #terms="ngModel">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="terms" class="text-gray-700">
+                                    J'accepte les <a routerLink="/cgu"
+                                        class="text-primary font-medium hover:underline">conditions
+                                        d'utilisation</a> et la <a routerLink="/confidentialite"
+                                        class="text-primary font-medium hover:underline">politique de
+                                        confidentialité</a>
+                                </label>
+                            </div>
+                        </div>
+                         <div *ngIf="terms.invalid && (terms.dirty || terms.touched) && registrationForm.submitted" class="text-red-500 text-sm mt-1">Vous devez accepter les conditions.</div>
+
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" id="newsletter" name="newsletter" [(ngModel)]="registerForm.newsletter"
+                                    class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="newsletter" class="text-gray-700">
+                                    Je souhaite recevoir la newsletter avec les offres exclusives
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton d'Inscription -->
+                    <button type="submit" [disabled]="registrationForm.invalid"
+                            class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
+                        Créer mon compte
+                    </button>
+
+                    <!-- Déjà inscrit -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Vous avez déjà un compte?
+                            <a routerLink="/login" class="text-primary font-medium hover:underline">Connectez-vous</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center text-white">
+        <p>&copy; {{ currentYear }} Agence Voyage. Tous droits réservés.</p>
+    </div>
+</div>
+<app-footer></app-footer>
