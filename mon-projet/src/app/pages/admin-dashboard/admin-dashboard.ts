@@ -7,13 +7,15 @@ import Chart from 'chart.js/auto'; // Ensure this import is present
 // Import Modal Components
 import { AddClientModalComponent, ClientData as AddClientModalClientData } from '../../components/admin/modals/add-client-modal/add-client-modal'; // Renamed to avoid conflict
 import { AddAgentModalComponent, AgentData as AddAgentModalAgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal'; // Aliased for clarity
-import { AddVoyageModalComponent, VoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal';
-import { AddTypeBilletModalComponent, TypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal';
+import { AddVoyageModalComponent, VoyageData as AddVoyageModalVoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal'; // Aliased
+import { AddTypeBilletModalComponent, TypeBilletData as AddTypeBilletModalTypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal'; // Aliased
 import { AddReservationModalComponent, ReservationData, BasicClientInfo, BasicVoyageInfo, BasicTypeBilletInfo } from '../../components/admin/modals/add-reservation-modal/add-reservation-modal';
 import { AddPaiementModalComponent, PaiementData, BasicReservationInfo, BasicAgentInfo } from '../../components/admin/modals/add-paiement-modal/add-paiement-modal';
 import { DeleteConfirmationModalComponent } from '../../components/admin/modals/delete-confirmation-modal/delete-confirmation-modal';
 import { ClientService, ClientDTO, Client } from '../../services/client.service';
-import { AgentService, AgentDTO } from '../../services/agent.service'; // Added AgentService and AgentDTO
+import { AgentService, AgentDTO } from '../../services/agent.service';
+import { VoyageService, VoyageDTO } from '../../services/voyage.service';
+import { TypeBilletService, TypeBilletDTO } from '../../services/type-billet.service'; // Added TypeBilletService
 
 export interface LatestReservation {
   clientName: string; clientEmail: string; clientImage: string;
@@ -55,9 +57,9 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   isDeleteModalOpen = false;
 
   clientToEdit: ClientDTO | null = null;
-  agentToEdit: AgentDTO | null = null; // Changed type to AgentDTO
-  voyageToEdit: VoyageData | null = null;
-  typeBilletToEdit: TypeBilletData | null = null;
+  agentToEdit: AgentDTO | null = null;
+  voyageToEdit: VoyageDTO | null = null;
+  typeBilletToEdit: TypeBilletDTO | null = null; // Changed type to TypeBilletDTO
   reservationToEdit: ReservationData | null = null;
   paiementToEdit: PaiementData | null = null;
 
@@ -73,20 +75,25 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
 
   latestReservations: LatestReservation[] = [];
   clientsList: ClientDTO[] = [];
-  agentsList: AgentDTO[] = []; // Changed type to AgentDTO[]
-  voyagesList: VoyageData[] = [];
+  agentsList: AgentDTO[] = [];
+  voyagesList: VoyageDTO[] = [];
+  typesBilletList: TypeBilletDTO[] = []; // Added typesBilletList
 
   constructor(
     private cdr: ChangeDetectorRef,
     private clientService: ClientService,
-    private agentService: AgentService // Injected AgentService
+    private agentService: AgentService,
+    private voyageService: VoyageService,
+    private typeBilletService: TypeBilletService // Injected TypeBilletService
   ) { }
 
   ngOnInit(): void {
     this.checkIfMobileView();
     this.populateSampleData();
     this.loadClients();
-    this.loadAgents(); // Added call to loadAgents
+    this.loadAgents();
+    this.loadVoyages();
+    this.loadTypesBillet(); // Added call to loadTypesBillet
   }
 
   ngAfterViewInit(): void {
@@ -100,19 +107,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { clientName: 'Sophie Martin', clientEmail: 'sophie@example.com', clientImage: 'https://randomuser.me/api/portraits/women/12.jpg', destination: 'Paris, France', date: '15/07/2023', status: 'Confirmée', statusClass: 'bg-green-100 text-green-800' },
       { clientName: 'Jean Dupont', clientEmail: 'jean@example.com', clientImage: 'https://randomuser.me/api/portraits/men/42.jpg', destination: 'New York, USA', date: '22/07/2023', status: 'En attente', statusClass: 'bg-yellow-100 text-yellow-800' }
     ];
-    // Removed direct population of this.clientsList and this.sampleClientsForModal
-    // Sample data for voyagesList
-    this.voyagesList = [
-      { id: 'voyage1', lieuDepart: 'Paris', lieuArrivee: 'New York', dateVoyage: '2024-09-15', prix: 550.00, placesDisponibles: 30 },
-      { id: 'voyage2', lieuDepart: 'Lyon', lieuArrivee: 'Rome', dateVoyage: '2024-10-20', prix: 275.50, placesDisponibles: 15 }
-    ];
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    this.sampleBilletsForModal = [{ id: 'b1', libelle: 'Eco' }, { id: 'b2', libelle: 'Business' }];
-    this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }];
+    // Removed direct population of this.clientsList, this.sampleClientsForModal
+    // Removed direct population of this.voyagesList and this.sampleVoyagesForModal
     // Removed direct population of this.agentsList and this.sampleAgentsForModal
+    // Static sampleBilletsForModal will be replaced by loadTypesBillet
+    this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }]; // Kept for now
   }
 
   @HostListener('window:resize', ['$event'])
@@ -260,31 +259,87 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   openAddVoyageModal(): void { this.voyageToEdit = null; this.isAddVoyageModalOpen = true; }
-  openEditVoyageModal(voyage: VoyageData): void { this.voyageToEdit = voyage; this.isAddVoyageModalOpen = true; }
+  openEditVoyageModal(voyage: VoyageDTO): void {
+    this.voyageToEdit = voyage;
+    this.isAddVoyageModalOpen = true;
+  }
   closeVoyageModal(): void { this.isAddVoyageModalOpen = false; this.voyageToEdit = null; }
-  handleSaveVoyage(voyage: VoyageData): void {
-    if (voyage.id) { // Existing voyage
-      const index = this.voyagesList.findIndex(v => v.id === voyage.id);
-      if (index > -1) {
-        this.voyagesList[index] = voyage;
-      }
-    } else { // New voyage
-      voyage.id = `voyage${Date.now().toString()}`; // Simple unique ID
-      this.voyagesList.push(voyage);
+  handleSaveVoyage(voyageFormData: AddVoyageModalVoyageData): void {
+    const voyagePayload: VoyageDTO = {
+      idVoyage: voyageFormData.idVoyage,
+      departVoyage: voyageFormData.departVoyage,
+      arriveVoyage: voyageFormData.arriveVoyage,
+      dateVoyage: voyageFormData.dateVoyage, // Ensure format is yyyy-MM-dd
+      prix: voyageFormData.prix,
+      placesDisponibles: voyageFormData.placesDisponibles
+    };
+
+    if (voyagePayload.idVoyage) { // Update existing voyage
+      this.voyageService.updateVoyage(voyagePayload.idVoyage, voyagePayload).subscribe({
+        next: () => {
+          this.showNotification(`Voyage vers ${voyagePayload.arriveVoyage} mis à jour.`);
+          this.loadVoyages(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error updating voyage:', err);
+          this.showNotification('Erreur lors de la mise à jour du voyage.');
+        },
+        complete: () => this.closeVoyageModal()
+      });
+    } else { // Create new voyage
+      this.voyageService.createVoyage(voyagePayload).subscribe({
+        next: (createdVoyage) => {
+          this.showNotification(`Voyage vers ${createdVoyage.arriveVoyage} créé.`);
+          this.loadVoyages(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error creating voyage:', err);
+          this.showNotification('Erreur lors de la création du voyage.');
+        },
+        complete: () => this.closeVoyageModal()
+      });
     }
-    // Update sampleVoyagesForModal as well
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    this.showNotification(`Voyage pour ${voyage.lieuArrivee} enregistré.`);
-    this.closeVoyageModal();
   }
 
   openAddTypeBilletModal(): void { this.typeBilletToEdit = null; this.isAddTypeBilletModalOpen = true; }
-  openEditTypeBilletModal(billet: TypeBilletData): void { this.typeBilletToEdit = billet; this.isAddTypeBilletModalOpen = true; }
+  openEditTypeBilletModal(billet: TypeBilletDTO): void {
+    this.typeBilletToEdit = billet;
+    this.isAddTypeBilletModalOpen = true;
+  }
   closeTypeBilletModal(): void { this.isAddTypeBilletModalOpen = false; this.typeBilletToEdit = null; }
-  handleSaveTypeBillet(billet: TypeBilletData): void { console.log('Saving type billet:', billet); this.closeTypeBilletModal(); this.showNotification('Type de billet enregistré.'); }
+  handleSaveTypeBillet(formData: AddTypeBilletModalTypeBilletData): void {
+    const payload: TypeBilletDTO = {
+      idTypeBillet: formData.idTypeBillet,
+      libelleTypeBillet: formData.libelleTypeBillet,
+      prixTypeBillet: formData.prixTypeBillet
+    };
+
+    if (payload.idTypeBillet) { // Update existing
+      this.typeBilletService.updateTypeBillet(payload.idTypeBillet, payload).subscribe({
+        next: () => {
+          this.showNotification(`Type de billet '${payload.libelleTypeBillet}' mis à jour.`);
+          this.loadTypesBillet();
+        },
+        error: (err) => {
+          console.error('Error updating type billet:', err);
+          this.showNotification('Erreur lors de la mise à jour du type de billet.');
+        },
+        complete: () => this.closeTypeBilletModal()
+      });
+    } else { // Create new
+      this.typeBilletService.createTypeBillet(payload).subscribe({
+        next: (created) => {
+          this.showNotification(`Type de billet '${created.libelleTypeBillet}' créé.`);
+          this.loadTypesBillet();
+        },
+        error: (err) => {
+          console.error('Error creating type billet:', err);
+          this.showNotification('Erreur lors de la création du type de billet.');
+        },
+        complete: () => this.closeTypeBilletModal()
+      });
+    }
+  }
 
   openAddReservationModal(): void { this.reservationToEdit = null; this.isAddReservationModalOpen = true; }
   openEditReservationModal(reservation: ReservationData): void { this.reservationToEdit = reservation; this.isAddReservationModalOpen = true; }
@@ -429,19 +484,23 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   // Voyage Delete Logic
-  deleteVoyageAction(voyageId: string): void {
-    this.voyagesList = this.voyagesList.filter(v => v.id !== voyageId);
-    // Update sampleVoyagesForModal after deletion
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    console.log(`Voyage with ID: ${voyageId} actioned for deletion.`);
+  deleteVoyageAction(voyageId: number): void { // Parameter changed to number
+    this.voyageService.deleteVoyage(voyageId).subscribe({
+      next: () => {
+        this.loadVoyages(); // Refresh list
+        // Notification handled by handleConfirmDelete
+      },
+      error: (err) => {
+        console.error('Error deleting voyage:', err);
+        this.showNotification('Erreur lors de la suppression du voyage.');
+        this.closeDeleteModal();
+      }
+    });
   }
 
-  onDeleteVoyage(voyage: VoyageData): void {
-    if (voyage.id) {
-      this.openDeleteModal(voyage.id, `Voyage ${voyage.lieuDepart} -> ${voyage.lieuArrivee}`, () => this.deleteVoyageAction(voyage.id!));
+  onDeleteVoyage(voyage: VoyageDTO): void { // Parameter type is now VoyageDTO
+    if (voyage.idVoyage) {
+      this.openDeleteModal(voyage.idVoyage, `Voyage ${voyage.departVoyage} -> ${voyage.arriveVoyage}`, () => this.deleteVoyageAction(voyage.idVoyage!));
     } else {
       console.error("Voyage ID is missing, cannot delete.");
       this.showNotification("Erreur: ID du voyage manquant.");
@@ -464,5 +523,69 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         this.showNotification('Erreur lors du chargement des agents.');
       }
     });
+  }
+
+  loadVoyages(): void {
+    this.voyageService.getAllVoyages().subscribe({
+      next: (data) => {
+        this.voyagesList = data;
+        this.sampleVoyagesForModal = data.map(v => ({
+          id: v.idVoyage!.toString(),
+          label: `${v.departVoyage} -> ${v.arriveVoyage} (${new Date(v.dateVoyage).toLocaleDateString()})`
+        }));
+        console.log('Voyages loaded:', this.voyagesList);
+      },
+      error: (err) => {
+        console.error('Error loading voyages:', err);
+        this.showNotification('Erreur lors du chargement des voyages.');
+      }
+    });
+  }
+
+  loadTypesBillet(): void {
+    this.typeBilletService.getAllTypesBillet().subscribe({
+      next: (data) => {
+        this.typesBilletList = data;
+        // Update sampleBilletsForModal based on the fetched data
+        this.sampleBilletsForModal = data.map(tb => ({
+          id: tb.idTypeBillet!.toString(),
+          libelle: tb.libelleTypeBillet
+        }));
+        console.log('Types Billet loaded:', this.typesBilletList);
+      },
+      error: (err) => {
+        console.error('Error loading types billet:', err);
+        this.showNotification('Erreur lors du chargement des types de billet.');
+      }
+    });
+  }
+
+  // Placeholder for onDeleteTypeBillet - to be implemented if HTML has delete buttons for types billets
+  deleteTypeBilletAction(idTypeBillet: number): void {
+    this.typeBilletService.deleteTypeBillet(idTypeBillet).subscribe({
+      next: (success) => {
+        if (success) {
+          this.loadTypesBillet();
+        } else {
+          console.error('Failed to delete type billet (backend returned false).');
+          this.showNotification('La suppression du type de billet a échoué.');
+        }
+        this.closeDeleteModal(); // Close modal regardless of backend boolean success for now
+      },
+      error: (err) => {
+        console.error('Error deleting type billet:', err);
+        this.showNotification('Erreur lors de la suppression du type de billet.');
+        this.closeDeleteModal();
+      }
+    });
+  }
+
+  onDeleteTypeBillet(typeBillet: TypeBilletDTO): void {
+    if (typeBillet.idTypeBillet) {
+      this.openDeleteModal(typeBillet.idTypeBillet, `Type Billet: ${typeBillet.libelleTypeBillet}`, () => this.deleteTypeBilletAction(typeBillet.idTypeBillet!));
+    } else {
+      console.error("TypeBillet ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID du type de billet manquant.");
+    }
   }
 }

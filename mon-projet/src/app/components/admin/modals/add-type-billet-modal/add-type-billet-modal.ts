@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
 export interface TypeBilletData {
-  id?: string;
-  libelle: string;
-  prix: number;
-  description?: string;
+  idTypeBillet?: number; // Changed from id: string
+  libelleTypeBillet: string;  // Changed from libelle
+  prixTypeBillet: number; // Changed from prix
+  // description?: string; // Removed as it's not in backend TYPE_BILLET entity
 }
 
 @Component({
@@ -50,9 +50,10 @@ export class AddTypeBilletModalComponent implements OnInit, OnChanges {
 
   getInitialTypeBilletData(): TypeBilletData {
     return {
-      libelle: '',
-      prix: 0,
-      description: ''
+      // idTypeBillet will be undefined for new types
+      libelleTypeBillet: '',
+      prixTypeBillet: 0
+      // description: '' // Removed
     };
   }
 

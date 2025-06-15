@@ -287,8 +287,8 @@
                   <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun voyage trouvé.</td>
                 </tr>
                 <tr *ngFor="let voyage of voyagesList">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.lieuDepart }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.lieuArrivee }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.departVoyage }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.arriveVoyage }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.dateVoyage | date:'dd/MM/yyyy' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.prix | currency:'EUR':'symbol':'1.2-2' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.placesDisponibles }}</td>
