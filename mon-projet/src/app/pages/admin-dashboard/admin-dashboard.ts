@@ -5,13 +5,14 @@ import { AdminTopbarComponent } from '../../components/admin-topbar/admin-topbar
 import Chart from 'chart.js/auto'; // Ensure this import is present
 
 // Import Modal Components
-import { AddClientModalComponent, ClientData } from '../../components/admin/modals/add-client-modal/add-client-modal';
+import { AddClientModalComponent, ClientData as AddClientModalClientData } from '../../components/admin/modals/add-client-modal/add-client-modal'; // Renamed to avoid conflict
 import { AddAgentModalComponent, AgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal';
 import { AddVoyageModalComponent, VoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal';
 import { AddTypeBilletModalComponent, TypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal';
 import { AddReservationModalComponent, ReservationData, BasicClientInfo, BasicVoyageInfo, BasicTypeBilletInfo } from '../../components/admin/modals/add-reservation-modal/add-reservation-modal';
 import { AddPaiementModalComponent, PaiementData, BasicReservationInfo, BasicAgentInfo } from '../../components/admin/modals/add-paiement-modal/add-paiement-modal';
 import { DeleteConfirmationModalComponent } from '../../components/admin/modals/delete-confirmation-modal/delete-confirmation-modal';
+import { ClientService, ClientDTO, Client } from '../../services/client.service';
 
 export interface LatestReservation {
   clientName: string; clientEmail: string; clientImage: string;
@@ -52,7 +53,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   isAddPaiementModalOpen = false;
   isDeleteModalOpen = false;
 
-  clientToEdit: ClientData | null = null;
+  clientToEdit: ClientDTO | null = null; // Changed type to ClientDTO
   agentToEdit: AgentData | null = null;
   voyageToEdit: VoyageData | null = null;
   typeBilletToEdit: TypeBilletData | null = null;
@@ -70,15 +71,16 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   sampleAgentsForModal: BasicAgentInfo[] = [];
 
   latestReservations: LatestReservation[] = [];
-  clientsList: ClientData[] = [];
+  clientsList: ClientDTO[] = []; // Changed type to ClientDTO[]
   agentsList: AgentData[] = [];
-  voyagesList: VoyageData[] = []; // Added voyagesList property
+  voyagesList: VoyageData[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef, private clientService: ClientService) { } // Injected ClientService
 
   ngOnInit(): void {
     this.checkIfMobileView();
-    this.populateSampleData();
+    this.populateSampleData(); // This might still exist for other data like latestReservations, agents, voyages etc.
+    this.loadClients(); // Added call to loadClients
   }
 
   ngAfterViewInit(): void {
@@ -92,11 +94,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { clientName: 'Sophie Martin', clientEmail: 'sophie@example.com', clientImage: 'https://randomuser.me/api/portraits/women/12.jpg', destination: 'Paris, France', date: '15/07/2023', status: 'Confirmée', statusClass: 'bg-green-100 text-green-800' },
       { clientName: 'Jean Dupont', clientEmail: 'jean@example.com', clientImage: 'https://randomuser.me/api/portraits/men/42.jpg', destination: 'New York, USA', date: '22/07/2023', status: 'En attente', statusClass: 'bg-yellow-100 text-yellow-800' }
     ];
-    this.clientsList = [
-      { id: '1', nom: 'Martin', prenom: 'Sophie', email: 'sophie@example.com', telephone: '06 12 34 56 78', sexe: 'Femme', dateNaissance: '1990-01-01', login: 'sophieM' }, // Removed avatar, not in ClientData
-      { id: '2', nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com', telephone: '07 89 01 23 45', sexe: 'Homme', dateNaissance: '1985-05-05', login: 'jeanD' }, // Removed avatar
-    ];
-    this.sampleClientsForModal = this.clientsList.map(c => ({ id: c.id!, name: `${c.prenom} ${c.nom}` }));
+    // Removed direct population of this.clientsList and this.sampleClientsForModal
     // Sample data for voyagesList
     this.voyagesList = [
       { id: 'voyage1', lieuDepart: 'Paris', lieuArrivee: 'New York', dateVoyage: '2024-09-15', prix: 550.00, placesDisponibles: 30 },
@@ -159,18 +157,59 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   openAddClientModal(): void { this.clientToEdit = null; this.isAddClientModalOpen = true; }
-  openEditClientModal(client: ClientData): void { this.clientToEdit = client; this.isAddClientModalOpen = true; }
+  // Parameter is ClientDTO. clientToEdit is ClientDTO | null.
+  // The modal's @Input() clientToEdit expects AddClientModalClientData.
+  // Since AddClientModalClientData (modal) and ClientDTO (service) are now structurally similar
+  // (idClient, nomClient etc.), direct assignment should largely work.
+  openEditClientModal(client: ClientDTO): void {
+    this.clientToEdit = client; // clientToEdit is now ClientDTO | null
+    this.isAddClientModalOpen = true;
+  }
   closeClientModal(): void { this.isAddClientModalOpen = false; this.clientToEdit = null; }
-  handleSaveClient(client: ClientData): void {
-    console.log('Saving client:', client);
-    if (client.id) {
-      const index = this.clientsList.findIndex(c => c.id === client.id);
-      if (index > -1) this.clientsList[index] = client;
-    } else {
-      this.clientsList.push({ ...client, id: Date.now().toString() }); // ClientData doesn't have avatar, so removed assignment
+  handleSaveClient(clientFormData: AddClientModalClientData): void {
+    // Map AddClientModalClientData from modal to ClientDTO or Client for the service
+    const clientPayload: Client = { // Use Client interface for create
+      idClient: clientFormData.idClient,
+      nomClient: clientFormData.nomClient,
+      prenomClient: clientFormData.prenomClient,
+      mailClient: clientFormData.mailClient,
+      telClient: clientFormData.telClient || '',
+      sexeClient: clientFormData.sexeClient || '',
+      dateNaiss: clientFormData.dateNaiss || '',
+      login: clientFormData.login,
+    };
+    if (clientFormData.password) {
+      clientPayload.password = clientFormData.password;
     }
-    this.showNotification(`Client ${client.prenom} ${client.nom} enregistré.`);
-    this.closeClientModal();
+
+    if (clientFormData.idClient) { // Update existing client
+      const updatePayload: ClientDTO = { ...clientPayload };
+      delete updatePayload.password;
+
+      this.clientService.updateClient(clientFormData.idClient, updatePayload).subscribe({
+        next: () => {
+          this.showNotification(`Client ${clientPayload.prenomClient} ${clientPayload.nomClient} mis à jour.`);
+          this.loadClients(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error updating client:', err);
+          this.showNotification('Erreur lors de la mise à jour du client.');
+        },
+        complete: () => this.closeClientModal()
+      });
+    } else { // Create new client
+      this.clientService.createClient(clientPayload).subscribe({
+        next: () => {
+          this.showNotification(`Client ${clientPayload.prenomClient} ${clientPayload.nomClient} créé.`);
+          this.loadClients(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error creating client:', err);
+          this.showNotification('Erreur lors de la création du client.');
+        },
+        complete: () => this.closeClientModal()
+      });
+    }
   }
 
   openAddAgentModal(): void { this.agentToEdit = null; this.isAddAgentModalOpen = true; }
@@ -237,9 +276,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     if (this.deleteAction) { this.deleteAction(); this.showNotification(`${this.itemToDeleteName} supprimé.`);}
     this.closeDeleteModal();
   }
-  deleteClientAction(clientId: string): void {
-    this.clientsList = this.clientsList.filter(c => c.id !== clientId);
-    console.log(`Client with ID: ${clientId} would be deleted.`);
+  deleteClientAction(clientId: number): void { // Parameter changed to number
+    this.clientService.deleteClient(clientId).subscribe({
+      next: () => {
+        // Notification is handled by handleConfirmDelete
+        this.loadClients(); // Refresh list
+      },
+      error: (err) => {
+        console.error('Error deleting client:', err);
+        this.showNotification('Erreur lors de la suppression du client.');
+        this.closeDeleteModal(); // Close modal even on error, or handle differently
+      }
+    });
   }
 
   showNotification(message: string): void {
@@ -302,8 +350,30 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     this.destroyChart();
   }
 
-  onDeleteClient(client: ClientData): void {
-    this.openDeleteModal(client.id!, `${client.prenom} ${client.nom}`, () => this.deleteClientAction(client.id!));
+  loadClients(): void {
+    this.clientService.getAllClients().subscribe({
+      next: (data) => {
+        this.clientsList = data;
+        this.sampleClientsForModal = data.map(c => ({
+          id: c.idClient!.toString(), // BasicClientInfo expects id as string
+          name: `${c.prenomClient} ${c.nomClient}`
+        }));
+        console.log('Clients loaded:', this.clientsList);
+      },
+      error: (err) => {
+        console.error('Error loading clients:', err);
+        this.showNotification('Erreur lors du chargement des clients.');
+      }
+    });
+  }
+
+  onDeleteClient(client: ClientDTO): void { // Parameter type is now ClientDTO
+    if (client.idClient) { // Check idClient
+      this.openDeleteModal(client.idClient, `${client.prenomClient} ${client.nomClient}`, () => this.deleteClientAction(client.idClient!));
+    } else {
+      console.error("Client ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID du client manquant.");
+    }
   }
 
   // Agent Delete Logic
