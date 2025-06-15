@@ -186,16 +186,18 @@
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40"
-                          [alt]="client.prenom + ' ' + client.nom">
+
+                          [alt]="client.prenomClient + ' ' + client.nomClient">
+
                       </div>
                       <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">{{ client.prenom }} {{ client.nom }}</div>
+                        <div class="text-sm font-medium text-gray-900">{{ client.prenomClient }} {{ client.nomClient }}</div>
                       </div>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.email }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.telephone }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.sexe }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.mailClient }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.telClient }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.sexeClient }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button (click)="openEditClientModal(client)"
                       class="text-sky-600 hover:text-sky-800 mr-3 edit-client">Modifier</button>
@@ -241,12 +243,15 @@
                       <!-- Placeholder for agent image/avatar if available in future -->
                       <!-- <div class="flex-shrink-0 h-10 w-10"><img class="h-10 w-10 rounded-full" [src]="agent.avatarUrl || 'https://via.placeholder.com/40'" alt=""></div> -->
                       <div class="ml-4"> <!-- Adjusted margin if no image -->
-                        <div class="text-sm font-medium text-gray-900">{{ agent.prenom }} {{ agent.nom }}</div>
+
+                        <div class="text-sm font-medium text-gray-900">{{ agent.prenomAgent }} {{ agent.nomAgent }}</div>
                       </div>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.email }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.telephone || 'N/A' }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.mailAgent }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.telAgent || 'N/A' }}</td>
+
+
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.role }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button (click)="openEditAgentModal(agent)" class="text-sky-600 hover:text-sky-800 mr-3">Modifier</button>
