@@ -186,9 +186,7 @@
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40"
-
                           [alt]="client.prenomClient + ' ' + client.nomClient">
-
                       </div>
                       <div class="ml-4">
                         <div class="text-sm font-medium text-gray-900">{{ client.prenomClient }} {{ client.nomClient }}</div>
@@ -243,15 +241,12 @@
                       <!-- Placeholder for agent image/avatar if available in future -->
                       <!-- <div class="flex-shrink-0 h-10 w-10"><img class="h-10 w-10 rounded-full" [src]="agent.avatarUrl || 'https://via.placeholder.com/40'" alt=""></div> -->
                       <div class="ml-4"> <!-- Adjusted margin if no image -->
-
                         <div class="text-sm font-medium text-gray-900">{{ agent.prenomAgent }} {{ agent.nomAgent }}</div>
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.mailAgent }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.telAgent || 'N/A' }}</td>
-
-
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ agent.role }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button (click)="openEditAgentModal(agent)" class="text-sky-600 hover:text-sky-800 mr-3">Modifier</button>
@@ -292,8 +287,8 @@
                   <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun voyage trouvé.</td>
                 </tr>
                 <tr *ngFor="let voyage of voyagesList">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.lieuDepart }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.lieuArrivee }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.departVoyage }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ voyage.arriveVoyage }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.dateVoyage | date:'dd/MM/yyyy' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.prix | currency:'EUR':'symbol':'1.2-2' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ voyage.placesDisponibles }}</td>
