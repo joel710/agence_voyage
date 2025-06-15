@@ -72,9 +72,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   sampleAgentsForModal: BasicAgentInfo[] = [];
 
   latestReservations: LatestReservation[] = [];
+
   clientsList: ClientDTO[] = [];
   agentsList: AgentDTO[] = []; // Changed type to AgentDTO[]
   voyagesList: VoyageData[] = [];
+
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -106,13 +108,17 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { id: 'voyage1', lieuDepart: 'Paris', lieuArrivee: 'New York', dateVoyage: '2024-09-15', prix: 550.00, placesDisponibles: 30 },
       { id: 'voyage2', lieuDepart: 'Lyon', lieuArrivee: 'Rome', dateVoyage: '2024-10-20', prix: 275.50, placesDisponibles: 15 }
     ];
+
+
     this.sampleVoyagesForModal = this.voyagesList.map(v => ({
       id: v.id!,
       label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
     }));
     this.sampleBilletsForModal = [{ id: 'b1', libelle: 'Eco' }, { id: 'b2', libelle: 'Business' }];
     this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }];
+
     // Removed direct population of this.agentsList and this.sampleAgentsForModal
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -211,6 +217,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         complete: () => this.closeClientModal()
       });
     }
+
+
   }
 
   openAddAgentModal(): void { this.agentToEdit = null; this.isAddAgentModalOpen = true; }
@@ -219,6 +227,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     this.isAddAgentModalOpen = true;
   }
   closeAgentModal(): void { this.isAddAgentModalOpen = false; this.agentToEdit = null; }
+
   handleSaveAgent(agentFormData: AddAgentModalAgentData): void {
     // Map AgentData from modal to AgentDTO for the service
     const agentPayload: AgentDTO = {
@@ -257,6 +266,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         complete: () => this.closeAgentModal()
       });
     }
+
   }
 
   openAddVoyageModal(): void { this.voyageToEdit = null; this.isAddVoyageModalOpen = true; }
@@ -304,6 +314,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     if (this.deleteAction) { this.deleteAction(); this.showNotification(`${this.itemToDeleteName} supprimé.`);}
     this.closeDeleteModal();
   }
+
   deleteClientAction(clientId: number): void { // Parameter changed to number
     this.clientService.deleteClient(clientId).subscribe({
       next: () => {
@@ -316,6 +327,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         this.closeDeleteModal(); // Close modal even on error, or handle differently
       }
     });
+
   }
 
   showNotification(message: string): void {
@@ -378,6 +390,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     this.destroyChart();
   }
 
+
   loadClients(): void {
     this.clientService.getAllClients().subscribe({
       next: (data) => {
@@ -422,6 +435,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   onDeleteAgent(agent: AgentDTO): void { // Parameter type is now AgentDTO
     if (agent.idAgent) {
       this.openDeleteModal(agent.idAgent, `${agent.prenomAgent} ${agent.nomAgent}`, () => this.deleteAgentAction(agent.idAgent!));
+
     } else {
       console.error("Agent ID is missing, cannot delete.");
       this.showNotification("Erreur: ID de l'agent manquant.");
@@ -446,6 +460,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       console.error("Voyage ID is missing, cannot delete.");
       this.showNotification("Erreur: ID du voyage manquant.");
     }
+
   }
 
   loadAgents(): void {
@@ -464,5 +479,6 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
         this.showNotification('Erreur lors du chargement des agents.');
       }
     });
+
   }
 }
