@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'; // Added HttpErrorResponse
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 // Interface for Client Data Transfer Object (used for GET, PUT responses)
 export interface ClientDTO {
@@ -54,16 +54,39 @@ export class ClientService {
 
   // GET /getAll
   getAllClients(): Observable<ClientDTO[]> {
-    return this.http.get<ClientDTO[]>(`${this.baseUrl}/getAll`)
+    return this.http.get<any[]>(`${this.baseUrl}/getAll`) // Changed to any[] to allow map to inspect
       .pipe(
+        map((response: any) => {
+          if (Array.isArray(response)) {
+            return response as ClientDTO[];
+          }
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}/getAll. Transforming to []. Consider fixing the API.`);
+            return [] as ClientDTO[];
+          }
+          console.warn(`Unexpected response type for GET ${this.baseUrl}/getAll. Expected ClientDTO[], got:`, response);
+          return [] as ClientDTO[]; // Fallback or throw
+        }),
         catchError(this.handleError)
       );
   }
 
   // GET /get/{idClient}
-  getClientById(idClient: number): Observable<ClientDTO> {
-    return this.http.get<ClientDTO>(`${this.baseUrl}/get/${idClient}`)
+  getClientById(idClient: number): Observable<ClientDTO | null> {
+    return this.http.get<any>(`${this.baseUrl}/get/${idClient}`) // Changed to any to allow map to inspect
       .pipe(
+        map((response: any) => {
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}/get/${idClient}. Transforming to null. Consider fixing the API to return 404.`);
+            return null;
+          }
+          if (response && typeof response === 'object' && response.idClient !== undefined) { // Basic check
+            return response as ClientDTO;
+          }
+          if (response === null) return null;
+          console.warn(`Unexpected response type for GET ${this.baseUrl}/get/${idClient}. Expected ClientDTO or empty {}, got:`, response);
+          return null;
+        }),
         catchError(this.handleError)
       );
   }
@@ -85,9 +108,20 @@ export class ClientService {
   }
 
   // PUT /search (expects ClientDTO for criteria)
-  searchClients(searchCriteria: Partial<ClientDTO>): Observable<ClientDTO[]> { // searchCriteria can be Partial
-    return this.http.put<ClientDTO[]>(`${this.baseUrl}/search`, searchCriteria, this.httpOptions)
+  searchClients(searchCriteria: Partial<ClientDTO>): Observable<ClientDTO[]> {
+    return this.http.put<any[]>(`${this.baseUrl}/search`, searchCriteria, this.httpOptions) // Changed to any[]
       .pipe(
+        map((response: any) => {
+          if (Array.isArray(response)) {
+            return response as ClientDTO[];
+          }
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for PUT ${this.baseUrl}/search. Transforming to []. Consider fixing the API.`);
+            return [] as ClientDTO[];
+          }
+          console.warn(`Unexpected response type for PUT ${this.baseUrl}/search. Expected ClientDTO[], got:`, response);
+          return [] as ClientDTO[]; // Fallback or throw
+        }),
         catchError(this.handleError)
       );
   }
