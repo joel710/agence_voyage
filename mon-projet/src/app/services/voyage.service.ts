@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 // Interface for Voyage Data Transfer Object
 // Based on the aligned VoyageData from the modal and VOYAGE entity
@@ -36,14 +36,41 @@ export class VoyageService {
 
   // GET /getAll
   getAllVoyages(): Observable<VoyageDTO[]> {
-    return this.http.get<VoyageDTO[]>(`${this.baseUrl}/getAll`)
-      .pipe(catchError(this.handleError));
+    return this.http.get<any[]>(`${this.baseUrl}/getAll`) // Changed to any[]
+      .pipe(
+        map((response: any) => {
+          if (Array.isArray(response)) {
+            return response as VoyageDTO[];
+          }
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}/getAll. Transforming to []. Consider fixing the API.`);
+            return [] as VoyageDTO[];
+          }
+          console.warn(`Unexpected response type for GET ${this.baseUrl}/getAll. Expected VoyageDTO[], got:`, response);
+          return [] as VoyageDTO[]; // Fallback or throw
+        }),
+        catchError(this.handleError)
+      );
   }
 
   // GET /get/{idVoyage}
-  getVoyageById(idVoyage: number): Observable<VoyageDTO> { // Assuming response is VoyageDTO for consistency, API doc says VOYAGE
-    return this.http.get<VoyageDTO>(`${this.baseUrl}/get/${idVoyage}`)
-      .pipe(catchError(this.handleError));
+  getVoyageById(idVoyage: number): Observable<VoyageDTO | null> {
+    return this.http.get<any>(`${this.baseUrl}/get/${idVoyage}`) // Changed to any
+      .pipe(
+        map((response: any) => {
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}/get/${idVoyage}. Transforming to null. Consider fixing the API to return 404.`);
+            return null;
+          }
+          if (response && typeof response === 'object' && response.idVoyage !== undefined) { // Basic check
+            return response as VoyageDTO;
+          }
+          if (response === null) return null;
+          console.warn(`Unexpected response type for GET ${this.baseUrl}/get/${idVoyage}. Expected VoyageDTO or empty {}, got:`, response);
+          return null;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   // PUT /update/{idVoyage}

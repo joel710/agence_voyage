@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 // Interface for Agent Data Transfer Object
 // Based on the AGENT entity and aligned AgentData from the modal
@@ -38,14 +38,49 @@ export class AgentService {
 
   // GET /agents (assumed endpoint)
   getAllAgents(): Observable<AgentDTO[]> {
-    return this.http.get<AgentDTO[]>(`${this.baseUrl}`) // Assuming GET all is at base URL
-      .pipe(catchError(this.handleError));
+    return this.http.get<any[]>(`${this.baseUrl}`) // Changed to any[] to allow map to inspect
+      .pipe(
+        map((response: any) => {
+          if (Array.isArray(response)) {
+            return response as AgentDTO[];
+          }
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}. Transforming to []. Consider fixing the API.`);
+            return [] as AgentDTO[];
+          }
+          // This case should ideally not be reached if API respects contract or HttpClient errors first
+          console.warn(`Unexpected response type for GET ${this.baseUrl}. Expected AgentDTO[], got:`, response);
+          return [] as AgentDTO[]; // Fallback to empty array, or throw error
+        }),
+        catchError(this.handleError)
+      );
   }
 
   // GET /agents/{idAgent} (assumed endpoint)
-  getAgentById(idAgent: number): Observable<AgentDTO> {
-    return this.http.get<AgentDTO>(`${this.baseUrl}/${idAgent}`)
-      .pipe(catchError(this.handleError));
+  getAgentById(idAgent: number): Observable<AgentDTO | null> {
+    return this.http.get<any>(`${this.baseUrl}/${idAgent}`) // Changed to any to allow map to inspect
+      .pipe(
+        map((response: any) => {
+          if (response && typeof response === 'object' && Object.keys(response).length === 0) {
+            console.warn(`API returned {} for GET ${this.baseUrl}/${idAgent}. Transforming to null. Consider fixing the API to return 404.`);
+            return null;
+          }
+          // If response is not an empty object, assume it's a valid AgentDTO
+          // Potentially add more checks here if API can return other non-DTO shapes with 200 OK
+          if (response && typeof response === 'object' && response.idAgent !== undefined) { // Basic check
+            return response as AgentDTO;
+          }
+          // If it's not an empty object and not a recognizable AgentDTO, it's an unexpected response
+          // For a getById, this might mean an error or an unexpected valid response.
+          // Returning null or throwing an error might be appropriate.
+          // If API guarantees 404 for not found, this path (for 200 OK) suggests malformed data.
+          if (response === null) return null; // If API explicitly returns null for 200 OK
+          console.warn(`Unexpected response type for GET ${this.baseUrl}/${idAgent}. Expected AgentDTO or empty {}, got:`, response);
+          // Decide: throw error, or return null? Returning null for now.
+          return null;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   // POST /agents (assumed endpoint)
