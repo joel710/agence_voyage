@@ -71,6 +71,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
 
   latestReservations: LatestReservation[] = [];
   clientsList: ClientData[] = [];
+  agentsList: AgentData[] = [];
+  voyagesList: VoyageData[] = []; // Added voyagesList property
 
   constructor(private cdr: ChangeDetectorRef) { }
 
@@ -95,10 +97,23 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { id: '2', nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com', telephone: '07 89 01 23 45', sexe: 'Homme', dateNaissance: '1985-05-05', login: 'jeanD' }, // Removed avatar
     ];
     this.sampleClientsForModal = this.clientsList.map(c => ({ id: c.id!, name: `${c.prenom} ${c.nom}` }));
-    this.sampleVoyagesForModal = [{ id: 'v1', label: 'Paris -> NYC (20/12/2023)' }, { id: 'v2', label: 'Lyon -> Rome (15/01/2024)' }];
+    // Sample data for voyagesList
+    this.voyagesList = [
+      { id: 'voyage1', lieuDepart: 'Paris', lieuArrivee: 'New York', dateVoyage: '2024-09-15', prix: 550.00, placesDisponibles: 30 },
+      { id: 'voyage2', lieuDepart: 'Lyon', lieuArrivee: 'Rome', dateVoyage: '2024-10-20', prix: 275.50, placesDisponibles: 15 }
+    ];
+    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
+      id: v.id!,
+      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
+    }));
     this.sampleBilletsForModal = [{ id: 'b1', libelle: 'Eco' }, { id: 'b2', libelle: 'Business' }];
     this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }];
-    this.sampleAgentsForModal = [{ id: 'ag1', name: 'Agent Smith' }, { id: 'ag2', name: 'Agent Jones' }];
+    // Sample data for agentsList
+    this.agentsList = [
+      { id: 'agent1', nom: 'Smith', prenom: 'John', email: 'john.smith@agency.com', telephone: '0102030405', role: 'Agent', sexe: 'Homme' },
+      { id: 'agent2', nom: 'Doe', prenom: 'Jane', email: 'jane.doe@agency.com', telephone: '0607080910', role: 'Admin', sexe: 'Femme' }
+    ];
+    this.sampleAgentsForModal = this.agentsList.map(a => ({ id: a.id!, name: `${a.prenom} ${a.nom}` }));
   }
 
   @HostListener('window:resize', ['$event'])
@@ -161,12 +176,43 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   openAddAgentModal(): void { this.agentToEdit = null; this.isAddAgentModalOpen = true; }
   openEditAgentModal(agent: AgentData): void { this.agentToEdit = agent; this.isAddAgentModalOpen = true; }
   closeAgentModal(): void { this.isAddAgentModalOpen = false; this.agentToEdit = null; }
-  handleSaveAgent(agent: AgentData): void { console.log('Saving agent:', agent); this.closeAgentModal(); this.showNotification('Agent enregistré.'); }
+  handleSaveAgent(agent: AgentData): void {
+    if (agent.id) { // Existing agent
+      const index = this.agentsList.findIndex(a => a.id === agent.id);
+      if (index > -1) {
+        this.agentsList[index] = agent;
+      }
+    } else { // New agent
+      agent.id = `agent${Date.now().toString()}`; // Simple unique ID
+      this.agentsList.push(agent);
+    }
+    this.showNotification(`Agent ${agent.prenom} ${agent.nom} enregistré.`);
+    this.closeAgentModal();
+    // Update sampleAgentsForModal if it's used elsewhere and needs to be fresh
+    this.sampleAgentsForModal = this.agentsList.map(a => ({ id: a.id!, name: `${a.prenom} ${a.nom}` }));
+  }
 
   openAddVoyageModal(): void { this.voyageToEdit = null; this.isAddVoyageModalOpen = true; }
   openEditVoyageModal(voyage: VoyageData): void { this.voyageToEdit = voyage; this.isAddVoyageModalOpen = true; }
   closeVoyageModal(): void { this.isAddVoyageModalOpen = false; this.voyageToEdit = null; }
-  handleSaveVoyage(voyage: VoyageData): void { console.log('Saving voyage:', voyage); this.closeVoyageModal(); this.showNotification('Voyage enregistré.'); }
+  handleSaveVoyage(voyage: VoyageData): void {
+    if (voyage.id) { // Existing voyage
+      const index = this.voyagesList.findIndex(v => v.id === voyage.id);
+      if (index > -1) {
+        this.voyagesList[index] = voyage;
+      }
+    } else { // New voyage
+      voyage.id = `voyage${Date.now().toString()}`; // Simple unique ID
+      this.voyagesList.push(voyage);
+    }
+    // Update sampleVoyagesForModal as well
+    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
+      id: v.id!,
+      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
+    }));
+    this.showNotification(`Voyage pour ${voyage.lieuArrivee} enregistré.`);
+    this.closeVoyageModal();
+  }
 
   openAddTypeBilletModal(): void { this.typeBilletToEdit = null; this.isAddTypeBilletModalOpen = true; }
   openEditTypeBilletModal(billet: TypeBilletData): void { this.typeBilletToEdit = billet; this.isAddTypeBilletModalOpen = true; }
@@ -257,6 +303,42 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   onDeleteClient(client: ClientData): void {
-    this.openDeleteModal(client.id!, client.prenom + ' ' + client.nom, () => this.deleteClientAction(client.id!));
+    this.openDeleteModal(client.id!, `${client.prenom} ${client.nom}`, () => this.deleteClientAction(client.id!));
+  }
+
+  // Agent Delete Logic
+  deleteAgentAction(agentId: string): void {
+    this.agentsList = this.agentsList.filter(a => a.id !== agentId);
+    console.log(`Agent with ID: ${agentId} actioned for deletion.`);
+    // No need to call showNotification here, as handleConfirmDelete does it.
+  }
+
+  onDeleteAgent(agent: AgentData): void {
+    if (agent.id) {
+      this.openDeleteModal(agent.id, `${agent.prenom} ${agent.nom}`, () => this.deleteAgentAction(agent.id!));
+    } else {
+      console.error("Agent ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID de l'agent manquant.");
+    }
+  }
+
+  // Voyage Delete Logic
+  deleteVoyageAction(voyageId: string): void {
+    this.voyagesList = this.voyagesList.filter(v => v.id !== voyageId);
+    // Update sampleVoyagesForModal after deletion
+    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
+      id: v.id!,
+      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
+    }));
+    console.log(`Voyage with ID: ${voyageId} actioned for deletion.`);
+  }
+
+  onDeleteVoyage(voyage: VoyageData): void {
+    if (voyage.id) {
+      this.openDeleteModal(voyage.id, `Voyage ${voyage.lieuDepart} -> ${voyage.lieuArrivee}`, () => this.deleteVoyageAction(voyage.id!));
+    } else {
+      console.error("Voyage ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID du voyage manquant.");
+    }
   }
 }
