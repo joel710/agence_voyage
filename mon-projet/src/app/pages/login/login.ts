@@ -42,11 +42,24 @@ export class LoginPageComponent {
         .catch(err => {
           console.error('Error during navigation to /admin:', err);
         });
-    } else {
-      console.log('Invalid credentials or regular user');
-      alert('Identifiants incorrects !');
-    }
+  } else if (this.loginForm.email === 'client@example.com' && this.loginForm.password === 'clientpassword') {
+    console.log('Client credentials match. Attempting to navigate to /client...'); // Assuming '/client' is the path
+    this.router.navigate(['/client']) // Path needs to be confirmed in next step
+      .then(success => {
+        if (success) {
+          console.log('Navigation to /client successful!');
+        } else {
+          console.error('Navigation to /client failed (returned false).');
+        }
+      })
+      .catch(err => {
+        console.error('Error during navigation to /client:', err);
+      });
+  } else {
+    console.log('Invalid credentials');
+    alert('Identifiants incorrects !');
   }
+}
 
   socialLogin(provider: string) {
     console.log('Social login with:', provider);
