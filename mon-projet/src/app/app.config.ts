@@ -1,7 +1,11 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes'; // Ensure this points to the routes we just defined
+import { routes } from './app.routes'; // Ensure this points to the routes
+import { provideHttpClient, withFetch } from '@angular/common/http'; // Added import
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes)]
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withFetch()) // Added provider
+  ]
 };

@@ -5,13 +5,17 @@ import { AdminTopbarComponent } from '../../components/admin-topbar/admin-topbar
 import Chart from 'chart.js/auto'; // Ensure this import is present
 
 // Import Modal Components
-import { AddClientModalComponent, ClientData } from '../../components/admin/modals/add-client-modal/add-client-modal';
-import { AddAgentModalComponent, AgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal';
-import { AddVoyageModalComponent, VoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal';
-import { AddTypeBilletModalComponent, TypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal';
+import { AddClientModalComponent, ClientData as AddClientModalClientData } from '../../components/admin/modals/add-client-modal/add-client-modal'; // Renamed to avoid conflict
+import { AddAgentModalComponent, AgentData as AddAgentModalAgentData } from '../../components/admin/modals/add-agent-modal/add-agent-modal'; // Aliased for clarity
+import { AddVoyageModalComponent, VoyageData as AddVoyageModalVoyageData } from '../../components/admin/modals/add-voyage-modal/add-voyage-modal'; // Aliased
+import { AddTypeBilletModalComponent, TypeBilletData as AddTypeBilletModalTypeBilletData } from '../../components/admin/modals/add-type-billet-modal/add-type-billet-modal'; // Aliased
 import { AddReservationModalComponent, ReservationData, BasicClientInfo, BasicVoyageInfo, BasicTypeBilletInfo } from '../../components/admin/modals/add-reservation-modal/add-reservation-modal';
 import { AddPaiementModalComponent, PaiementData, BasicReservationInfo, BasicAgentInfo } from '../../components/admin/modals/add-paiement-modal/add-paiement-modal';
 import { DeleteConfirmationModalComponent } from '../../components/admin/modals/delete-confirmation-modal/delete-confirmation-modal';
+import { ClientService, ClientDTO, Client } from '../../services/client.service';
+import { AgentService, AgentDTO } from '../../services/agent.service';
+import { VoyageService, VoyageDTO } from '../../services/voyage.service';
+import { TypeBilletService, TypeBilletDTO } from '../../services/type-billet.service'; // Added TypeBilletService
 
 export interface LatestReservation {
   clientName: string; clientEmail: string; clientImage: string;
@@ -52,10 +56,10 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   isAddPaiementModalOpen = false;
   isDeleteModalOpen = false;
 
-  clientToEdit: ClientData | null = null;
-  agentToEdit: AgentData | null = null;
-  voyageToEdit: VoyageData | null = null;
-  typeBilletToEdit: TypeBilletData | null = null;
+  clientToEdit: ClientDTO | null = null;
+  agentToEdit: AgentDTO | null = null;
+  voyageToEdit: VoyageDTO | null = null;
+  typeBilletToEdit: TypeBilletDTO | null = null; // Changed type to TypeBilletDTO
   reservationToEdit: ReservationData | null = null;
   paiementToEdit: PaiementData | null = null;
 
@@ -70,15 +74,26 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   sampleAgentsForModal: BasicAgentInfo[] = [];
 
   latestReservations: LatestReservation[] = [];
-  clientsList: ClientData[] = [];
-  agentsList: AgentData[] = [];
-  voyagesList: VoyageData[] = []; // Added voyagesList property
+  clientsList: ClientDTO[] = [];
+  agentsList: AgentDTO[] = [];
+  voyagesList: VoyageDTO[] = [];
+  typesBilletList: TypeBilletDTO[] = []; // Added typesBilletList
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private clientService: ClientService,
+    private agentService: AgentService,
+    private voyageService: VoyageService,
+    private typeBilletService: TypeBilletService // Injected TypeBilletService
+  ) { }
 
   ngOnInit(): void {
     this.checkIfMobileView();
     this.populateSampleData();
+    this.loadClients();
+    this.loadAgents();
+    this.loadVoyages();
+    this.loadTypesBillet(); // Added call to loadTypesBillet
   }
 
   ngAfterViewInit(): void {
@@ -92,28 +107,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
       { clientName: 'Sophie Martin', clientEmail: 'sophie@example.com', clientImage: 'https://randomuser.me/api/portraits/women/12.jpg', destination: 'Paris, France', date: '15/07/2023', status: 'Confirmée', statusClass: 'bg-green-100 text-green-800' },
       { clientName: 'Jean Dupont', clientEmail: 'jean@example.com', clientImage: 'https://randomuser.me/api/portraits/men/42.jpg', destination: 'New York, USA', date: '22/07/2023', status: 'En attente', statusClass: 'bg-yellow-100 text-yellow-800' }
     ];
-    this.clientsList = [
-      { id: '1', nom: 'Martin', prenom: 'Sophie', email: 'sophie@example.com', telephone: '06 12 34 56 78', sexe: 'Femme', dateNaissance: '1990-01-01', login: 'sophieM' }, // Removed avatar, not in ClientData
-      { id: '2', nom: 'Dupont', prenom: 'Jean', email: 'jean@example.com', telephone: '07 89 01 23 45', sexe: 'Homme', dateNaissance: '1985-05-05', login: 'jeanD' }, // Removed avatar
-    ];
-    this.sampleClientsForModal = this.clientsList.map(c => ({ id: c.id!, name: `${c.prenom} ${c.nom}` }));
-    // Sample data for voyagesList
-    this.voyagesList = [
-      { id: 'voyage1', lieuDepart: 'Paris', lieuArrivee: 'New York', dateVoyage: '2024-09-15', prix: 550.00, placesDisponibles: 30 },
-      { id: 'voyage2', lieuDepart: 'Lyon', lieuArrivee: 'Rome', dateVoyage: '2024-10-20', prix: 275.50, placesDisponibles: 15 }
-    ];
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    this.sampleBilletsForModal = [{ id: 'b1', libelle: 'Eco' }, { id: 'b2', libelle: 'Business' }];
-    this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }];
-    // Sample data for agentsList
-    this.agentsList = [
-      { id: 'agent1', nom: 'Smith', prenom: 'John', email: 'john.smith@agency.com', telephone: '0102030405', role: 'Agent', sexe: 'Homme' },
-      { id: 'agent2', nom: 'Doe', prenom: 'Jane', email: 'jane.doe@agency.com', telephone: '0607080910', role: 'Admin', sexe: 'Femme' }
-    ];
-    this.sampleAgentsForModal = this.agentsList.map(a => ({ id: a.id!, name: `${a.prenom} ${a.nom}` }));
+    // Removed direct population of this.clientsList, this.sampleClientsForModal
+    // Removed direct population of this.voyagesList and this.sampleVoyagesForModal
+    // Removed direct population of this.agentsList and this.sampleAgentsForModal
+    // Static sampleBilletsForModal will be replaced by loadTypesBillet
+    this.sampleReservationsForModal = [{ id: 'r1', label: 'RES001 - S.Martin' }, { id: 'r2', label: 'RES002 - J.Dupont' }]; // Kept for now
   }
 
   @HostListener('window:resize', ['$event'])
@@ -159,65 +157,189 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   openAddClientModal(): void { this.clientToEdit = null; this.isAddClientModalOpen = true; }
-  openEditClientModal(client: ClientData): void { this.clientToEdit = client; this.isAddClientModalOpen = true; }
+  // Parameter is ClientDTO. clientToEdit is ClientDTO | null.
+  // The modal's @Input() clientToEdit expects AddClientModalClientData.
+  // Since AddClientModalClientData (modal) and ClientDTO (service) are now structurally similar
+  // (idClient, nomClient etc.), direct assignment should largely work.
+  openEditClientModal(client: ClientDTO): void {
+    this.clientToEdit = client; // clientToEdit is now ClientDTO | null
+    this.isAddClientModalOpen = true;
+  }
   closeClientModal(): void { this.isAddClientModalOpen = false; this.clientToEdit = null; }
-  handleSaveClient(client: ClientData): void {
-    console.log('Saving client:', client);
-    if (client.id) {
-      const index = this.clientsList.findIndex(c => c.id === client.id);
-      if (index > -1) this.clientsList[index] = client;
-    } else {
-      this.clientsList.push({ ...client, id: Date.now().toString() }); // ClientData doesn't have avatar, so removed assignment
+  handleSaveClient(clientFormData: AddClientModalClientData): void {
+    // Map AddClientModalClientData from modal to ClientDTO or Client for the service
+    const clientPayload: Client = { // Use Client interface for create
+      idClient: clientFormData.idClient,
+      nomClient: clientFormData.nomClient,
+      prenomClient: clientFormData.prenomClient,
+      mailClient: clientFormData.mailClient,
+      telClient: clientFormData.telClient || '',
+      sexeClient: clientFormData.sexeClient || '',
+      dateNaiss: clientFormData.dateNaiss || '',
+      login: clientFormData.login,
+    };
+    if (clientFormData.password) {
+      clientPayload.password = clientFormData.password;
     }
-    this.showNotification(`Client ${client.prenom} ${client.nom} enregistré.`);
-    this.closeClientModal();
+
+    if (clientFormData.idClient) { // Update existing client
+      const updatePayload: ClientDTO = { ...clientPayload };
+      delete updatePayload.password;
+
+      this.clientService.updateClient(clientFormData.idClient, updatePayload).subscribe({
+        next: () => {
+          this.showNotification(`Client ${clientPayload.prenomClient} ${clientPayload.nomClient} mis à jour.`);
+          this.loadClients(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error updating client:', err);
+          this.showNotification('Erreur lors de la mise à jour du client.');
+        },
+        complete: () => this.closeClientModal()
+      });
+    } else { // Create new client
+      this.clientService.createClient(clientPayload).subscribe({
+        next: () => {
+          this.showNotification(`Client ${clientPayload.prenomClient} ${clientPayload.nomClient} créé.`);
+          this.loadClients(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error creating client:', err);
+          this.showNotification('Erreur lors de la création du client.');
+        },
+        complete: () => this.closeClientModal()
+      });
+    }
   }
 
   openAddAgentModal(): void { this.agentToEdit = null; this.isAddAgentModalOpen = true; }
-  openEditAgentModal(agent: AgentData): void { this.agentToEdit = agent; this.isAddAgentModalOpen = true; }
+  openEditAgentModal(agent: AgentDTO): void {
+    this.agentToEdit = agent;
+    this.isAddAgentModalOpen = true;
+  }
   closeAgentModal(): void { this.isAddAgentModalOpen = false; this.agentToEdit = null; }
-  handleSaveAgent(agent: AgentData): void {
-    if (agent.id) { // Existing agent
-      const index = this.agentsList.findIndex(a => a.id === agent.id);
-      if (index > -1) {
-        this.agentsList[index] = agent;
-      }
-    } else { // New agent
-      agent.id = `agent${Date.now().toString()}`; // Simple unique ID
-      this.agentsList.push(agent);
+  handleSaveAgent(agentFormData: AddAgentModalAgentData): void {
+    // Map AgentData from modal to AgentDTO for the service
+    const agentPayload: AgentDTO = {
+      idAgent: agentFormData.idAgent,
+      nomAgent: agentFormData.nomAgent,
+      prenomAgent: agentFormData.prenomAgent,
+      mailAgent: agentFormData.mailAgent,
+      telAgent: agentFormData.telAgent || undefined,
+      sexeAgent: agentFormData.sexeAgent,
+      dateNaiss: agentFormData.dateNaiss || undefined,
+      role: agentFormData.role, // Added role assignment
+    };
+
+    if (agentPayload.idAgent) { // Update existing agent
+      this.agentService.updateAgent(agentPayload.idAgent, agentPayload).subscribe({
+        next: () => {
+          this.showNotification(`Agent ${agentPayload.prenomAgent} ${agentPayload.nomAgent} mis à jour.`);
+          this.loadAgents(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error updating agent:', err);
+          this.showNotification('Erreur lors de la mise à jour de l\'agent.');
+        },
+        complete: () => this.closeAgentModal()
+      });
+    } else { // Create new agent
+      this.agentService.createAgent(agentPayload).subscribe({
+        next: (createdAgent) => {
+          this.showNotification(`Agent ${createdAgent.prenomAgent} ${createdAgent.nomAgent} créé.`);
+          this.loadAgents(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error creating agent:', err);
+          this.showNotification('Erreur lors de la création de l\'agent.');
+        },
+        complete: () => this.closeAgentModal()
+      });
     }
-    this.showNotification(`Agent ${agent.prenom} ${agent.nom} enregistré.`);
-    this.closeAgentModal();
-    // Update sampleAgentsForModal if it's used elsewhere and needs to be fresh
-    this.sampleAgentsForModal = this.agentsList.map(a => ({ id: a.id!, name: `${a.prenom} ${a.nom}` }));
   }
 
   openAddVoyageModal(): void { this.voyageToEdit = null; this.isAddVoyageModalOpen = true; }
-  openEditVoyageModal(voyage: VoyageData): void { this.voyageToEdit = voyage; this.isAddVoyageModalOpen = true; }
+  openEditVoyageModal(voyage: VoyageDTO): void {
+    this.voyageToEdit = voyage;
+    this.isAddVoyageModalOpen = true;
+  }
   closeVoyageModal(): void { this.isAddVoyageModalOpen = false; this.voyageToEdit = null; }
-  handleSaveVoyage(voyage: VoyageData): void {
-    if (voyage.id) { // Existing voyage
-      const index = this.voyagesList.findIndex(v => v.id === voyage.id);
-      if (index > -1) {
-        this.voyagesList[index] = voyage;
-      }
-    } else { // New voyage
-      voyage.id = `voyage${Date.now().toString()}`; // Simple unique ID
-      this.voyagesList.push(voyage);
+  handleSaveVoyage(voyageFormData: AddVoyageModalVoyageData): void {
+    const voyagePayload: VoyageDTO = {
+      idVoyage: voyageFormData.idVoyage,
+      departVoyage: voyageFormData.departVoyage,
+      arriveVoyage: voyageFormData.arriveVoyage,
+      dateVoyage: voyageFormData.dateVoyage, // Ensure format is yyyy-MM-dd
+      prix: voyageFormData.prix,
+      placesDisponibles: voyageFormData.placesDisponibles
+    };
+
+    if (voyagePayload.idVoyage) { // Update existing voyage
+      this.voyageService.updateVoyage(voyagePayload.idVoyage, voyagePayload).subscribe({
+        next: () => {
+          this.showNotification(`Voyage vers ${voyagePayload.arriveVoyage} mis à jour.`);
+          this.loadVoyages(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error updating voyage:', err);
+          this.showNotification('Erreur lors de la mise à jour du voyage.');
+        },
+        complete: () => this.closeVoyageModal()
+      });
+    } else { // Create new voyage
+      this.voyageService.createVoyage(voyagePayload).subscribe({
+        next: (createdVoyage) => {
+          this.showNotification(`Voyage vers ${createdVoyage.arriveVoyage} créé.`);
+          this.loadVoyages(); // Refresh list
+        },
+        error: (err) => {
+          console.error('Error creating voyage:', err);
+          this.showNotification('Erreur lors de la création du voyage.');
+        },
+        complete: () => this.closeVoyageModal()
+      });
     }
-    // Update sampleVoyagesForModal as well
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    this.showNotification(`Voyage pour ${voyage.lieuArrivee} enregistré.`);
-    this.closeVoyageModal();
   }
 
   openAddTypeBilletModal(): void { this.typeBilletToEdit = null; this.isAddTypeBilletModalOpen = true; }
-  openEditTypeBilletModal(billet: TypeBilletData): void { this.typeBilletToEdit = billet; this.isAddTypeBilletModalOpen = true; }
+  openEditTypeBilletModal(billet: TypeBilletDTO): void {
+    this.typeBilletToEdit = billet;
+    this.isAddTypeBilletModalOpen = true;
+  }
   closeTypeBilletModal(): void { this.isAddTypeBilletModalOpen = false; this.typeBilletToEdit = null; }
-  handleSaveTypeBillet(billet: TypeBilletData): void { console.log('Saving type billet:', billet); this.closeTypeBilletModal(); this.showNotification('Type de billet enregistré.'); }
+  handleSaveTypeBillet(formData: AddTypeBilletModalTypeBilletData): void {
+    const payload: TypeBilletDTO = {
+      idTypeBillet: formData.idTypeBillet,
+      libelleTypeBillet: formData.libelleTypeBillet,
+      prixTypeBillet: formData.prixTypeBillet
+    };
+
+    if (payload.idTypeBillet) { // Update existing
+      this.typeBilletService.updateTypeBillet(payload.idTypeBillet, payload).subscribe({
+        next: () => {
+          this.showNotification(`Type de billet '${payload.libelleTypeBillet}' mis à jour.`);
+          this.loadTypesBillet();
+        },
+        error: (err) => {
+          console.error('Error updating type billet:', err);
+          this.showNotification('Erreur lors de la mise à jour du type de billet.');
+        },
+        complete: () => this.closeTypeBilletModal()
+      });
+    } else { // Create new
+      this.typeBilletService.createTypeBillet(payload).subscribe({
+        next: (created) => {
+          this.showNotification(`Type de billet '${created.libelleTypeBillet}' créé.`);
+          this.loadTypesBillet();
+        },
+        error: (err) => {
+          console.error('Error creating type billet:', err);
+          this.showNotification('Erreur lors de la création du type de billet.');
+        },
+        complete: () => this.closeTypeBilletModal()
+      });
+    }
+  }
 
   openAddReservationModal(): void { this.reservationToEdit = null; this.isAddReservationModalOpen = true; }
   openEditReservationModal(reservation: ReservationData): void { this.reservationToEdit = reservation; this.isAddReservationModalOpen = true; }
@@ -237,9 +359,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     if (this.deleteAction) { this.deleteAction(); this.showNotification(`${this.itemToDeleteName} supprimé.`);}
     this.closeDeleteModal();
   }
-  deleteClientAction(clientId: string): void {
-    this.clientsList = this.clientsList.filter(c => c.id !== clientId);
-    console.log(`Client with ID: ${clientId} would be deleted.`);
+  deleteClientAction(clientId: number): void { // Parameter changed to number
+    this.clientService.deleteClient(clientId).subscribe({
+      next: () => {
+        // Notification is handled by handleConfirmDelete
+        this.loadClients(); // Refresh list
+      },
+      error: (err) => {
+        console.error('Error deleting client:', err);
+        this.showNotification('Erreur lors de la suppression du client.');
+        this.closeDeleteModal(); // Close modal even on error, or handle differently
+      }
+    });
   }
 
   showNotification(message: string): void {
@@ -302,20 +433,50 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
     this.destroyChart();
   }
 
-  onDeleteClient(client: ClientData): void {
-    this.openDeleteModal(client.id!, `${client.prenom} ${client.nom}`, () => this.deleteClientAction(client.id!));
+  loadClients(): void {
+    this.clientService.getAllClients().subscribe({
+      next: (data) => {
+        this.clientsList = data;
+        this.sampleClientsForModal = data.map(c => ({
+          id: c.idClient!.toString(), // BasicClientInfo expects id as string
+          name: `${c.prenomClient} ${c.nomClient}`
+        }));
+        console.log('Clients loaded:', this.clientsList);
+      },
+      error: (err) => {
+        console.error('Error loading clients:', err);
+        this.showNotification('Erreur lors du chargement des clients.');
+      }
+    });
+  }
+
+  onDeleteClient(client: ClientDTO): void { // Parameter type is now ClientDTO
+    if (client.idClient) { // Check idClient
+      this.openDeleteModal(client.idClient, `${client.prenomClient} ${client.nomClient}`, () => this.deleteClientAction(client.idClient!));
+    } else {
+      console.error("Client ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID du client manquant.");
+    }
   }
 
   // Agent Delete Logic
-  deleteAgentAction(agentId: string): void {
-    this.agentsList = this.agentsList.filter(a => a.id !== agentId);
-    console.log(`Agent with ID: ${agentId} actioned for deletion.`);
-    // No need to call showNotification here, as handleConfirmDelete does it.
+  deleteAgentAction(agentId: number): void { // Parameter changed to number
+    this.agentService.deleteAgent(agentId).subscribe({
+      next: () => {
+        this.loadAgents(); // Refresh list
+        // Notification is handled by handleConfirmDelete
+      },
+      error: (err) => {
+        console.error('Error deleting agent:', err);
+        this.showNotification('Erreur lors de la suppression de l\'agent.');
+        this.closeDeleteModal();
+      }
+    });
   }
 
-  onDeleteAgent(agent: AgentData): void {
-    if (agent.id) {
-      this.openDeleteModal(agent.id, `${agent.prenom} ${agent.nom}`, () => this.deleteAgentAction(agent.id!));
+  onDeleteAgent(agent: AgentDTO): void { // Parameter type is now AgentDTO
+    if (agent.idAgent) {
+      this.openDeleteModal(agent.idAgent, `${agent.prenomAgent} ${agent.nomAgent}`, () => this.deleteAgentAction(agent.idAgent!));
     } else {
       console.error("Agent ID is missing, cannot delete.");
       this.showNotification("Erreur: ID de l'agent manquant.");
@@ -323,22 +484,108 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy, AfterView
   }
 
   // Voyage Delete Logic
-  deleteVoyageAction(voyageId: string): void {
-    this.voyagesList = this.voyagesList.filter(v => v.id !== voyageId);
-    // Update sampleVoyagesForModal after deletion
-    this.sampleVoyagesForModal = this.voyagesList.map(v => ({
-      id: v.id!,
-      label: `${v.lieuDepart} -> ${v.lieuArrivee} (${new Date(v.dateVoyage).toLocaleDateString()})`
-    }));
-    console.log(`Voyage with ID: ${voyageId} actioned for deletion.`);
+  deleteVoyageAction(voyageId: number): void { // Parameter changed to number
+    this.voyageService.deleteVoyage(voyageId).subscribe({
+      next: () => {
+        this.loadVoyages(); // Refresh list
+        // Notification handled by handleConfirmDelete
+      },
+      error: (err) => {
+        console.error('Error deleting voyage:', err);
+        this.showNotification('Erreur lors de la suppression du voyage.');
+        this.closeDeleteModal();
+      }
+    });
   }
 
-  onDeleteVoyage(voyage: VoyageData): void {
-    if (voyage.id) {
-      this.openDeleteModal(voyage.id, `Voyage ${voyage.lieuDepart} -> ${voyage.lieuArrivee}`, () => this.deleteVoyageAction(voyage.id!));
+  onDeleteVoyage(voyage: VoyageDTO): void { // Parameter type is now VoyageDTO
+    if (voyage.idVoyage) {
+      this.openDeleteModal(voyage.idVoyage, `Voyage ${voyage.departVoyage} -> ${voyage.arriveVoyage}`, () => this.deleteVoyageAction(voyage.idVoyage!));
     } else {
       console.error("Voyage ID is missing, cannot delete.");
       this.showNotification("Erreur: ID du voyage manquant.");
+    }
+  }
+
+  loadAgents(): void {
+    this.agentService.getAllAgents().subscribe({
+      next: (data) => {
+        this.agentsList = data;
+        // Update sampleAgentsForModal if it's used elsewhere
+        this.sampleAgentsForModal = data.map(a => ({
+          id: a.idAgent!.toString(),
+          name: `${a.prenomAgent} ${a.nomAgent}`
+        }));
+        console.log('Agents loaded:', this.agentsList);
+      },
+      error: (err) => {
+        console.error('Error loading agents:', err);
+        this.showNotification('Erreur lors du chargement des agents.');
+      }
+    });
+  }
+
+  loadVoyages(): void {
+    this.voyageService.getAllVoyages().subscribe({
+      next: (data) => {
+        this.voyagesList = data;
+        this.sampleVoyagesForModal = data.map(v => ({
+          id: v.idVoyage!.toString(),
+          label: `${v.departVoyage} -> ${v.arriveVoyage} (${new Date(v.dateVoyage).toLocaleDateString()})`
+        }));
+        console.log('Voyages loaded:', this.voyagesList);
+      },
+      error: (err) => {
+        console.error('Error loading voyages:', err);
+        this.showNotification('Erreur lors du chargement des voyages.');
+      }
+    });
+  }
+
+  loadTypesBillet(): void {
+    this.typeBilletService.getAllTypesBillet().subscribe({
+      next: (data) => {
+        this.typesBilletList = data;
+        // Update sampleBilletsForModal based on the fetched data
+        this.sampleBilletsForModal = data.map(tb => ({
+          id: tb.idTypeBillet!.toString(),
+          libelle: tb.libelleTypeBillet
+        }));
+        console.log('Types Billet loaded:', this.typesBilletList);
+      },
+      error: (err) => {
+        console.error('Error loading types billet:', err);
+        this.showNotification('Erreur lors du chargement des types de billet.');
+      }
+    });
+  }
+
+  // Placeholder for onDeleteTypeBillet - to be implemented if HTML has delete buttons for types billets
+  deleteTypeBilletAction(idTypeBillet: number): void {
+    this.typeBilletService.deleteTypeBillet(idTypeBillet).subscribe({
+      next: (success) => {
+        if (success) {
+          this.loadTypesBillet();
+        } else {
+          console.error('Failed to delete type billet (backend returned false).');
+          this.showNotification('La suppression du type de billet a échoué.');
+        }
+        this.closeDeleteModal(); // Close modal regardless of backend boolean success for now
+      },
+      error: (err) => {
+        console.error('Error deleting type billet:', err);
+        this.showNotification('Erreur lors de la suppression du type de billet.');
+        this.closeDeleteModal();
+      }
+    });
+  }
+
+  onDeleteTypeBillet(typeBillet: TypeBilletDTO): void {
+    if (typeBillet.idTypeBillet) {
+      this.openDeleteModal(typeBillet.idTypeBillet, `Type Billet: ${typeBillet.libelleTypeBillet}`, () => this.deleteTypeBilletAction(typeBillet.idTypeBillet!));
+    } else {
+      console.error("TypeBillet ID is missing, cannot delete.");
+      this.showNotification("Erreur: ID du type de billet manquant.");
     }
   }
 }
