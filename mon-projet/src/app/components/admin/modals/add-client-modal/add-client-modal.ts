@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
 export interface ClientData {
-  id?: string;
-  nom: string;
-  prenom: string;
-  email: string;
-  telephone?: string;
-  sexe: 'Homme' | 'Femme' | 'Autre' | '';
-  dateNaissance?: string;
-  login: string;
-  password?: string;
+  idClient?: number; // Changed from id: string, to match backend Long/number
+  nomClient: string;  // Changed from nom
+  prenomClient: string; // Changed from prenom
+  mailClient: string; // Changed from email
+  telClient?: string; // Changed from telephone
+  sexeClient: 'Homme' | 'Femme' | 'Autre' | ''; // Changed from sexe
+  dateNaiss?: string; // Changed from dateNaissance, ensure yyyy-MM-dd format for API
+  login: string; // No change
+  password?: string; // No change, optional for DTOs (especially for GET/PUT responses)
 }
 
 @Component({
@@ -46,10 +46,14 @@ export class AddClientModalComponent implements OnInit, OnChanges { // Added OnC
   private updateModalState(): void {
     if (this.clientToEdit) {
       this.modalTitle = 'Modifier le client';
+      // When editing, map existing ClientData (if it's still using old names from parent)
+      // to new ClientData structure. Or assume clientToEdit already conforms.
+      // For safety, let's assume clientToEdit might be in old format if this component
+      // is updated before its parent passes data in new format.
+      // However, the problem implies clientToEdit will conform, so direct spread is fine.
       this.clientData = { ...this.clientToEdit };
       // Password should typically not be pre-filled for editing for security
       // and to prevent accidental overwrite if not changed.
-      // It's also conditionally required in the template.
       delete this.clientData.password;
     } else {
       this.modalTitle = 'Ajouter un client';
@@ -59,14 +63,15 @@ export class AddClientModalComponent implements OnInit, OnChanges { // Added OnC
 
   getInitialClientData(): ClientData {
     return {
-      nom: '',
-      prenom: '',
-      email: '',
-      telephone: '',
-      sexe: '', // Default to empty string to match <option value="">
-      dateNaissance: '',
+      // idClient will be undefined for new clients
+      nomClient: '',
+      prenomClient: '',
+      mailClient: '',
+      telClient: '',
+      sexeClient: '',
+      dateNaiss: '', // Ensure this is handled as yyyy-MM-dd if a date input is bound to it
       login: '',
-      password: '' // Password is required for new client via template's [required]
+      password: ''
     };
   }
 

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
 export interface VoyageData {
-  id?: string;
-  lieuDepart: string;
-  lieuArrivee: string;
-  dateVoyage: string; // Should be in 'yyyy-MM-dd' format for <input type="date">
-  prix?: number;
-  placesDisponibles?: number;
+  idVoyage?: number; // Changed from id: string
+  departVoyage: string;  // Changed from lieuDepart
+  arriveVoyage: string; // Changed from lieuArrivee
+  dateVoyage: string; // Name is same, ensure yyyy-MM-dd format
+  prix?: number; // Kept
+  placesDisponibles?: number; // Kept
 }
 
 @Component({
@@ -55,9 +55,10 @@ export class AddVoyageModalComponent implements OnInit, OnChanges {
 
   getInitialVoyageData(): VoyageData {
     return {
-      lieuDepart: '',
-      lieuArrivee: '',
-      dateVoyage: this.formatDateForInput(new Date().toISOString()), // Default to today
+      // idVoyage will be undefined for new voyages
+      departVoyage: '',
+      arriveVoyage: '',
+      dateVoyage: this.formatDateForInput(new Date().toISOString()),
       prix: 0,
       placesDisponibles: 0
     };

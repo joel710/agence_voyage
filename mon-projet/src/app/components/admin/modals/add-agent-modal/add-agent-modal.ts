@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
 export interface AgentData {
-  id?: string;
-  nom: string;
-  prenom: string;
-  sexe: 'Homme' | 'Femme' | 'Autre' | '';
-  dateNaissance?: string;
-  telephone?: string;
-  email: string;
-  role: 'Agent' | 'Admin' | '';
-  // Add password fields if agents have separate logins managed here
+  idAgent?: number; // Changed from id: string
+  nomAgent: string;  // Changed from nom
+  prenomAgent: string; // Changed from prenom
+  sexeAgent: 'Homme' | 'Femme' | 'Autre' | ''; // Changed from sexe
+  dateNaiss?: string; // Changed from dateNaissance, ensure yyyy-MM-dd format for API
+  telAgent?: string; // Changed from telephone
+  mailAgent: string; // Changed from email
+  role: 'Agent' | 'Admin' | ''; // Kept for frontend form, may not map directly to AGENT entity
 }
 
 @Component({
@@ -55,12 +54,13 @@ export class AddAgentModalComponent implements OnInit, OnChanges {
 
   getInitialAgentData(): AgentData {
     return {
-      nom: '',
-      prenom: '',
-      sexe: '',
-      dateNaissance: '',
-      telephone: '',
-      email: '',
+      // idAgent will be undefined for new agents
+      nomAgent: '',
+      prenomAgent: '',
+      sexeAgent: '',
+      dateNaiss: '',
+      telAgent: '',
+      mailAgent: '',
       role: ''
     };
   }

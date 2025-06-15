@@ -10,27 +10,27 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700">Nom</label>
-          <input type="text" name="nom" [(ngModel)]="clientData.nom" required
+          <input type="text" name="nomClient" [(ngModel)]="clientData.nomClient" required
                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Prénom</label>
-          <input type="text" name="prenom" [(ngModel)]="clientData.prenom" required
+          <input type="text" name="prenomClient" [(ngModel)]="clientData.prenomClient" required
                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
-          <input type="email" name="email" [(ngModel)]="clientData.email" required email
+          <input type="email" name="mailClient" [(ngModel)]="clientData.mailClient" required email
                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Téléphone</label>
-          <input type="tel" name="telephone" [(ngModel)]="clientData.telephone"
+          <input type="tel" name="telClient" [(ngModel)]="clientData.telClient"
                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Sexe</label>
-          <select name="sexe" [(ngModel)]="clientData.sexe" required
+          <select name="sexeClient" [(ngModel)]="clientData.sexeClient" required
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
             <option value="">Sélectionner</option>
             <option value="Homme">Homme</option>
@@ -40,7 +40,7 @@
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Date de naissance</label>
-          <input type="date" name="dateNaissance" [(ngModel)]="clientData.dateNaissance"
+          <input type="date" name="dateNaiss" [(ngModel)]="clientData.dateNaiss"
                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
         </div>
         <div>
