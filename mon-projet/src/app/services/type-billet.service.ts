@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 // Interface for TypeBillet Data Transfer Object / Entity
@@ -28,7 +28,7 @@ export class TypeBilletService {
   // POST /create (API expects TYPE_BILLET, returns TYPE_BILLET)
   createTypeBillet(typeBilletData: TypeBilletDTO): Observable<TypeBilletDTO> {
     return this.http.post<TypeBilletDTO>(`${this.baseUrl}/create`, typeBilletData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'createTypeBillet')));
   }
 
   // GET /getAll (API returns List<TYPE_BILLET>)
@@ -46,7 +46,7 @@ export class TypeBilletService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/getAll. Expected TypeBilletDTO[], got:`, response);
           return [] as TypeBilletDTO[]; // Fallback or throw
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getAllTypesBillet'))
       );
   }
 
@@ -66,7 +66,7 @@ export class TypeBilletService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/get/${idTypeBillet}. Expected TypeBilletDTO or empty {}, got:`, response);
           return null;
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getTypeBilletById'))
       );
   }
 
@@ -74,7 +74,7 @@ export class TypeBilletService {
   // Note: API path uses {idType}, DTO uses idTypeBillet. Assuming idType refers to idTypeBillet.
   updateTypeBillet(idTypeBillet: number, typeBilletData: TypeBilletDTO): Observable<TypeBilletDTO> {
     return this.http.put<TypeBilletDTO>(`${this.baseUrl}/update/${idTypeBillet}`, typeBilletData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'updateTypeBillet')));
   }
 
   // DELETE /delete/{id} (API returns boolean)
@@ -105,18 +105,28 @@ export class TypeBilletService {
           console.warn('Unexpected response status for deleteTypeBillet:', response.status);
           return false; // Fallback for other unexpected success codes
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'deleteTypeBillet'))
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
+  private handleError(error: HttpErrorResponse, methodName: string = 'typeBilletOperation'): Observable<any> {
+    if (error.status === 200 && error.error && typeof error.error === 'object' && Object.keys(error.error).length === 0) {
+      console.warn(`Backend returned 200 OK with an empty object for ${methodName} (TypeBillet API). Returning appropriate default value.`);
+      if (methodName === 'getTypeBilletById') {
+        return of(null);
+      } else if (methodName === 'deleteTypeBillet') {
+        return of(true); // Interpreting 200 OK with {} as success for delete
+      } else {
+        return of([]); // e.g., for 'getAllTypesBillet'
+      }
     } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${JSON.stringify(error.error)}`);
+      if (error.error instanceof ErrorEvent) {
+        console.error(`Client-side/network error in ${methodName} (TypeBillet API):`, error.error.message);
+        return throwError(() => new Error(`Network error during ${methodName} in TypeBillet API; please check connection.`));
+      } else {
+        console.error(`Backend error in ${methodName} (TypeBillet API): returned code ${error.status}, body was: ${JSON.stringify(error.error)}`);
+        return throwError(() => new Error(`Something bad happened with TypeBillet API during ${methodName}; please try again later.`));
+      }
     }
-    return throwError(() => new Error('Something bad happened with TypeBillet API; please try again later.'));
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 // Interface for Client Data Transfer Object (used for GET, PUT responses)
@@ -48,7 +48,7 @@ export class ClientService {
   createClient(clientData: Client): Observable<Client> {
     return this.http.post<Client>(`${this.baseUrl}/create`, clientData, this.httpOptions)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'createClient'))
       );
   }
 
@@ -67,7 +67,7 @@ export class ClientService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/getAll. Expected ClientDTO[], got:`, response);
           return [] as ClientDTO[]; // Fallback or throw
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getAllClients'))
       );
   }
 
@@ -87,7 +87,7 @@ export class ClientService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/get/${idClient}. Expected ClientDTO or empty {}, got:`, response);
           return null;
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getClientById'))
       );
   }
 
@@ -95,7 +95,7 @@ export class ClientService {
   updateClient(idClient: number, clientData: ClientDTO): Observable<ClientDTO> {
     return this.http.put<ClientDTO>(`${this.baseUrl}/update/${idClient}`, clientData, this.httpOptions)
       .pipe(
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'updateClient'))
       );
   }
 
@@ -103,7 +103,7 @@ export class ClientService {
   deleteClient(idClient: number): Observable<any> { // Response type might vary
     return this.http.delete<any>(`${this.baseUrl}/delete/${idClient}`, this.httpOptions) // Added httpOptions for consistency, though DELETE might not need Content-Type
       .pipe(
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'deleteClient'))
       );
   }
 
@@ -122,23 +122,32 @@ export class ClientService {
           console.warn(`Unexpected response type for PUT ${this.baseUrl}/search. Expected ClientDTO[], got:`, response);
           return [] as ClientDTO[]; // Fallback or throw
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'searchClients'))
       );
   }
 
   // Basic error handler
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
+  private handleError(error: HttpErrorResponse, methodName: string = 'clientOperation'): Observable<any> {
+    if (error.status === 200 && error.error && typeof error.error === 'object' && Object.keys(error.error).length === 0) {
+      console.warn(`Backend returned 200 OK with an empty object for ${methodName}. Returning appropriate default empty value.`);
+      if (methodName === 'getClientById') {
+        return of(null);
+      } else {
+        return of([]);
+      }
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${JSON.stringify(error.error)}`);
+      if (error.error instanceof ErrorEvent) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error.message);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong.
+        console.error(
+          `Backend returned code ${error.status} for ${methodName}, ` +
+          `body was: ${JSON.stringify(error.error)}`);
+      }
+      // Return an observable with a user-facing error message.
+      return throwError(() => new Error(`Something bad happened with Client API during ${methodName}; please try again later.`));
     }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened with Client API; please try again later.'));
   }
 }

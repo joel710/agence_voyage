@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 // Interface for Voyage Data Transfer Object
@@ -31,7 +31,7 @@ export class VoyageService {
   // POST /create
   createVoyage(voyageData: VoyageDTO): Observable<VoyageDTO> { // Assuming response is VoyageDTO, API doc says VOYAGE or VoyageDTO
     return this.http.post<VoyageDTO>(`${this.baseUrl}/create`, voyageData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'createVoyage')));
   }
 
   // GET /getAll
@@ -49,7 +49,7 @@ export class VoyageService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/getAll. Expected VoyageDTO[], got:`, response);
           return [] as VoyageDTO[]; // Fallback or throw
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getAllVoyages'))
       );
   }
 
@@ -69,30 +69,38 @@ export class VoyageService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}/get/${idVoyage}. Expected VoyageDTO or empty {}, got:`, response);
           return null;
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getVoyageById'))
       );
   }
 
   // PUT /update/{idVoyage}
   updateVoyage(idVoyage: number, voyageData: VoyageDTO): Observable<VoyageDTO> { // Assuming response is VoyageDTO
     return this.http.put<VoyageDTO>(`${this.baseUrl}/update/${idVoyage}`, voyageData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'updateVoyage')));
   }
 
   // DELETE /delete/{idVoyage}
   deleteVoyage(idVoyage: number): Observable<any> { // Response type might vary
     return this.http.delete<any>(`${this.baseUrl}/delete/${idVoyage}`, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'deleteVoyage')));
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
+  private handleError(error: HttpErrorResponse, methodName: string = 'voyageOperation'): Observable<any> {
+    if (error.status === 200 && error.error && typeof error.error === 'object' && Object.keys(error.error).length === 0) {
+      console.warn(`Backend returned 200 OK with an empty object for ${methodName}. Returning appropriate default empty value.`);
+      if (methodName === 'getVoyageById') {
+        return of(null);
+      } else {
+        return of([]);
+      }
     } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${JSON.stringify(error.error)}`);
+      if (error.error instanceof ErrorEvent) {
+        console.error(`Client-side/network error in ${methodName}:`, error.error.message);
+        return throwError(() => new Error(`Network error during ${methodName} in Voyage API; please check connection.`));
+      } else {
+        console.error(`Backend error in ${methodName} (Voyage API): returned code ${error.status}, body was: ${JSON.stringify(error.error)}`);
+        return throwError(() => new Error(`Something bad happened with Voyage API during ${methodName}; please try again later.`));
+      }
     }
-    return throwError(() => new Error('Something bad happened with Voyage API; please try again later.'));
   }
 }

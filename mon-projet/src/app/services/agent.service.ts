@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 // Interface for Agent Data Transfer Object
@@ -52,7 +52,7 @@ export class AgentService {
           console.warn(`Unexpected response type for GET ${this.baseUrl}. Expected AgentDTO[], got:`, response);
           return [] as AgentDTO[]; // Fallback to empty array, or throw error
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getAllAgents'))
       );
   }
 
@@ -79,36 +79,45 @@ export class AgentService {
           // Decide: throw error, or return null? Returning null for now.
           return null;
         }),
-        catchError(this.handleError)
+        catchError(err => this.handleError(err, 'getAgentById'))
       );
   }
 
   // POST /agents (assumed endpoint)
   createAgent(agentData: AgentDTO): Observable<AgentDTO> { // Assuming AgentDTO is used for creation
     return this.http.post<AgentDTO>(`${this.baseUrl}`, agentData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'createAgent')));
   }
 
   // PUT /agents/{idAgent} (assumed endpoint)
   updateAgent(idAgent: number, agentData: AgentDTO): Observable<AgentDTO> {
     return this.http.put<AgentDTO>(`${this.baseUrl}/${idAgent}`, agentData, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'updateAgent')));
   }
 
   // DELETE /agents/{idAgent} (assumed endpoint)
   deleteAgent(idAgent: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/${idAgent}`, this.httpOptions)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(err => this.handleError(err, 'deleteAgent')));
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
+  private handleError(error: HttpErrorResponse, methodName: string = 'agentOperation'): Observable<any> {
+    if (error.status === 200 && error.error && typeof error.error === 'object' && Object.keys(error.error).length === 0) {
+      console.warn(`Backend returned 200 OK with an empty object for ${methodName}. Returning appropriate default empty value.`);
+      if (methodName === 'getAgentById') {
+        return of(null);
+      } else {
+        return of([]);
+      }
     } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${JSON.stringify(error.error)}`);
+      if (error.error instanceof ErrorEvent) {
+        console.error(`An error occurred during ${methodName}:`, error.error.message);
+      } else {
+        console.error(
+          `Backend returned code ${error.status} for ${methodName}, ` +
+          `body was: ${JSON.stringify(error.error)}`);
+      }
+      return throwError(() => new Error(`Something bad happened with Agent API during ${methodName}; please try again later.`));
     }
-    return throwError(() => new Error('Something bad happened with Agent API; please try again later.'));
   }
 }
